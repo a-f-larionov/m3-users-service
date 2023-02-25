@@ -9,6 +9,6 @@
 ### [Development plan](plan.md)
 
 ### Contacts
-    
-<b>email</b>: [a.f.larionov@gmail.com](mailto:a.f.larionov@gmail.com)<br>
-telegram: [a_f_larionov](https://t.me/a_f_larionov)
+
+<img width="15px" src="email.256x256.png"/>&nbsp;&nbsp;email: [a.f.larionov@gmail.com](mailto:a.f.larionov@gmail.com)<br>
+<img width="15px" src="telegram.256x256.png"/>&nbsp;&nbsp;telegram: [a_f_larionov](https://t.me/a_f_larionov)
