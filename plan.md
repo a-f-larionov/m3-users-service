@@ -1,43 +1,48 @@
-### Stage 1: Preparing
+### Этап 1: Подготовка
 
 ###  nodejs-migration
 
- _Desription:_  
-> Доработать миграцию БД. Запуск миграции, если нет БД, иначе ничего не делать. Вариант можно костыльный, главное чтобы работало.
+ _Описание:
+> Доработать миграцию БД. 
+> Если нет БД - запускать миграцию. 
+> Иначе - ничего не делать.
+> Вариант возможен костыльный - главное чтобы работало.
 
-_Результат:_
-> Запускаем с нуля m3-compose по инструкции, бд устанавливается и содержит структура и последний бэкап
+_Результат:
+> Запускаем m3-compose по инструкции, с нуля,
+> устанавливается и содержит структура и последний бэкап.
 
 ### Задача: java-hello-world
-_Desription_ 
-> Доработка docker-compose, запуск java контейнера, и вывод hello-world
+_Описание_ 
+> Доработка docker-compose,
+> запуск java контейнера, и вывод hello-world.
 
-_Result_
-> Запускае с нуля m3-compose по инструкции, видим Hello-World.
+_Результат_
+> Запускаем с нуля m3-compose по инструкции, видим Hello-World.
 
 ### Задача: compose-readably
-_Description_
-> Доработать проекты m3-compose, tri-base, m3-users-service так, чтобы
-было понятно и быстро запускать с нуля сервис
+_Описание_
+> Доработать проекты m3-compose, tri-base, m3-users-service так,
+> чтобы было понятно и быстро запускать с нуля сервисы.
+
+_Результат_
+> Открываем инструкцию и все быстро и понятно запускаем.
+
+#### Задача: spring-listen-kafka
+_Описание_
+
+> Java приложение слушает кафку и отправляет сообщения
 
 _Result_
-> Открываем интрукцию и все быстро и понятно запускаем.
-
-#### Task: spring-listen-kafka
-_Description_
-
-> Java application knows how to listen kafka
-
-_Result_
-> Java application on start send ping to kafka and receive pong
+> Java приложение при старте отправляет в kafka ping и получает pong.
 
 
-### Task: second-stage-develop  
-_Description_
+### Задача: second-stage-develop  
+_Описание_
     
-    Develop the second stage for future :)    
-_Result_
-    Stage 2 have some tasks
+    Разработка задача 2ого этапа    
+_Результат_
+    Этап 2 имеет описанные задачи.
 
 
-Stage 2: Under construction
+Этап 2: В разработке...
