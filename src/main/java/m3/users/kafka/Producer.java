@@ -15,7 +15,7 @@ public class Producer {
     public KafkaTemplate<String, String> kafkaTemplate;
 
     public void sendMessage(String msg) {
-        ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(topicName, msg);
+        ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send("topic5", msg);
 
         future.addCallback(new ListenableFutureCallback<>() {
             @Override
