@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: alexandr
+      rollback:
+        - sql:
+            sql: drop table users;
+      changes:
+        - sqlFile:
+            comment: "comment one"
+            path: classpath:db\changelog\change-sets\create-users.sql
