@@ -1,66 +1,80 @@
 package m3.users.listeners;
 
-import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
-
+import m3.users.enums.SocNetType;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import m3.users.dto.rq.AuthRqDto;
 import m3.users.dto.rq.SendMeUserInfoRqDto;
 import m3.users.dto.rq.UpdateLastLogoutRqDto;
+import m3.users.dto.rs.AuthSuccessRsDto;
 import m3.users.dto.rs.UpdateUserListInfoRsDto;
-import m3.users.mappers.UsersMapper;
-import m3.users.services.UserService;
+import m3.users.services.impl.UserServiceImpl;
 
 public class KafkaListenerHandlersTest {
 
-    private UserService userService = Mockito.mock(UserService.class);
-    private UsersMapper usersMapper = Mockito.mock(UsersMapper.class);
+    private final UserServiceImpl service = Mockito.mock(UserServiceImpl.class);
 
-    private KafkaListenerHandlers kafka = new KafkaListenerHandlers(userService, usersMapper);
+    private final KafkaListenerHandlers listener = new KafkaListenerHandlers(service);
+
+    @Test
+    void auth() {
+        // given
+        var rq = new AuthRqDto();
+        var rs = createAuthSuccessRsDto();
+        when(service.auth(any())).thenReturn(rs);
+
+        // when
+        var actualRs = listener.auth(rq);
+
+        // then
+        verify(service).auth(eq(rq));
+        assertThat(actualRs)
+                .isInstanceOf(AuthSuccessRsDto.class)
+                .isEqualTo(rs);
+    }
 
     @Test
     void sendMeUserInfo() {
         // given
-        var toUserId = 1L;
-        var ids = List.of(1L, 2L, 3L);
-        var dto = SendMeUserInfoRqDto.builder()
-                .toUserId(toUserId)
-                .ids(ids)
-                .build();
-        when(userService.getUsers(any())).thenReturn(emptyList());
+        var rq = new SendMeUserInfoRqDto();
+        var rs = new UpdateUserListInfoRsDto();
+        when(service.getUsers(any())).thenReturn(rs);
 
         // when
-        var result = kafka.sendMeUserInfo(dto);
+        var result = listener.sendMeUserInfo(rq);
 
         // then
-        verify(userService).getUsers(eq(ids));
-
-        assertThat(result)
-                .isInstanceOf(UpdateUserListInfoRsDto.class);
-        assertThat(result.getToUserId()).isEqualTo(toUserId);
-        assertThat(result.getList()).hasSize(0);
+        verify(service).getUsers(eq(rq));
+        assertThat(result).isInstanceOf(rs.getClass()).isEqualTo(rs);
     }
 
     @Test
     void lastLogout() {
         // given
-        var userId = 1L;
-        var dto = UpdateLastLogoutRqDto.builder()
-                .userId(userId)
-                .build();
+        var rq = UpdateLastLogoutRqDto.builder().build();
 
         // when
-        kafka.updateLastLogout(dto);
+        listener.updateLastLogout(rq);
 
         // then
-        verify(userService)
-                .updateLastLogout(eq(userId));
+        verify(service).updateLastLogout(eq(rq));
+    }
+
+    private AuthSuccessRsDto createAuthSuccessRsDto() {
+        return AuthSuccessRsDto.builder()
+                .userId(1L)
+                .nextPointId(10L)
+                .socNetType(SocNetType.VK)
+                .socNetUserId(34343343L)
+                .createTm(123L)
+                .loginTm(345L)
+                .build();
     }
 }

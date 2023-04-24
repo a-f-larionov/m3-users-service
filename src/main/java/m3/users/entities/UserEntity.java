@@ -1,37 +1,40 @@
 package m3.users.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
+import m3.users.enums.SocNetType;
 
-@Data
-@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
 @Table(name = "users")
+@Entity
 public class UserEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "socnetuserid")
-    private long socNetUserId;
+    private Long socNetUserId;
 
     @Column(name = "socnettypeid")
-    private int socNetTypeId;
+    private Long socNetTypeId;
 
     @Column(name = "create_tm")
-    private long create_tm;
+    private Long createTm;
 
     @Column(name = "login_tm")
-    private long login_tm;
+    private Long loginTm;
 
     @Column(name = "logout_tm")
-    private long logout_tm;
+    private Long logoutTm;
 
     @Column(name = "nextpointid")
-    private long nextPointId;
+    private Long nextPointId;
 
     @Column(name = "fullrecoverytime")
-    private long fullRecoveryTime;
+    private Long fullRecoveryTime;
 }

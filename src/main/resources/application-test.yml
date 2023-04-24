@@ -1,9 +1,15 @@
+filename: app-test
 spring:
   kafka:
     bootstrap-servers: kafka:9092
 
   
   datasource:
-    url: jdbc:mysql://mysql:3306/local_database_test
+    url: jdbc:mysql://mysql:3306/local_database
     username: local_user
     password: local_password
+
+socnet:
+  vk:
+    appId:
+    secretKey: 1234

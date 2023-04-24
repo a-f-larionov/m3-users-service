@@ -1,58 +1,40 @@
 package m3.users.listeners;
 
-import java.util.List;
-
+import lombok.AllArgsConstructor;
+import m3.users.dto.rq.AuthRqDto;
+import m3.users.dto.rq.SendMeUserInfoRqDto;
+import m3.users.dto.rq.UpdateLastLogoutRqDto;
+import m3.users.dto.rs.AuthSuccessRsDto;
+import m3.users.dto.rs.UpdateUserListInfoRsDto;
+import m3.users.services.impl.UserServiceImpl;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
-
-import lombok.AllArgsConstructor;
-import m3.users.dto.rq.SendMeUserInfoRqDto;
-import m3.users.dto.rq.UpdateLastLogoutRqDto;
-import m3.users.dto.rs.UpdateUserListInfoRsDto;
-import m3.users.entities.UserEntity;
-import m3.users.mappers.UsersMapper;
-import m3.users.services.UserService;
 
 @AllArgsConstructor
 @Component
 @KafkaListener(topics = "t-users", groupId = "2")
 public class KafkaListenerHandlers {
 
-    private final UserService service;
-    private final UsersMapper mapper;
+    private final UserServiceImpl service;
+
+    @KafkaHandler
+    @SendTo("t-node")
+    public AuthSuccessRsDto auth(AuthRqDto authRqDto) {
+        var rs = service.auth(authRqDto);
+        rs.setConnectionId(authRqDto.getConnectionId());
+        return rs;
+    }
 
     @KafkaHandler
     @SendTo("t-node")
     public UpdateUserListInfoRsDto sendMeUserInfo(SendMeUserInfoRqDto sendMeUserInfoDto) {
-
-        List<UserEntity> usersList = service.getUsers(sendMeUserInfoDto.getIds());
-
-        var list = usersList.stream()
-                .map(user -> {
-                    return mapper.toDto(user);
-                })
-                .toList();
-
-        return UpdateUserListInfoRsDto.builder()
-                .toUserId(sendMeUserInfoDto.getToUserId())
-                .list(list)
-                .build();
+        return service.getUsers(sendMeUserInfoDto);
     }
 
     @KafkaHandler
-    public void updateLastLogout(UpdateLastLogoutRqDto dto){
-        service.updateLastLogout(dto.getUserId());
+    public void updateLastLogout(UpdateLastLogoutRqDto dto) {
+        service.updateLastLogout(dto);
     }
-
-    // @KafkaHandler
-    // public void updateLastLogin(UpdateLastLoginRqDto dto){
-    //     // @todo
-    //     //time = LogicTimeServer.getTime();
-    //     // DB.query("UPDATE " + tableName + " SET login_tm = " +
-    //     //     time + " WHERE id = " + userId, function () {
-    //     //     }
-    //     // );        
-    // }
 }

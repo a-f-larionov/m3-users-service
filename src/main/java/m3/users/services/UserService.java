@@ -1,25 +1,16 @@
 package m3.users.services;
 
-import java.util.List;
+import m3.users.dto.rq.AuthRqDto;
+import m3.users.dto.rq.SendMeUserInfoRqDto;
+import m3.users.dto.rq.UpdateLastLogoutRqDto;
+import m3.users.dto.rs.AuthSuccessRsDto;
+import m3.users.dto.rs.UpdateUserListInfoRsDto;
 
-import org.springframework.stereotype.Service;
+public interface UserService {
 
-import lombok.AllArgsConstructor;
-import m3.users.entities.UserEntity;
-import m3.users.repositories.UsersRepository;
+    AuthSuccessRsDto auth(AuthRqDto authRqDto);
 
-@Service
-@AllArgsConstructor
-public class UserService {
+    UpdateUserListInfoRsDto getUsers(SendMeUserInfoRqDto rq);
 
-    private final UsersRepository usersRepository;
-
-    public List<UserEntity> getUsers(List<Long> ids) {
-        return usersRepository.findAllByIdIn(ids);
-    }
-
-    public void updateLastLogout(long userId) {
-        usersRepository.updateLastLogout(userId, System.currentTimeMillis());
-    }
-    
+    void updateLastLogout(UpdateLastLogoutRqDto rq);
 }
