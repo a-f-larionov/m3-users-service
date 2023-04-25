@@ -2,7 +2,7 @@ package m3.users.listeners;
 
 import lombok.AllArgsConstructor;
 import m3.users.dto.rq.AuthRqDto;
-import m3.users.dto.rq.SendMeUserInfoRqDto;
+import m3.users.dto.rq.SendMeUserListInfoRqDto;
 import m3.users.dto.rq.UpdateLastLogoutRqDto;
 import m3.users.dto.rs.AuthSuccessRsDto;
 import m3.users.dto.rs.UpdateUserListInfoRsDto;
@@ -22,14 +22,12 @@ public class KafkaListenerHandlers {
     @KafkaHandler
     @SendTo("t-node")
     public AuthSuccessRsDto auth(AuthRqDto authRqDto) {
-        var rs = service.auth(authRqDto);
-        rs.setConnectionId(authRqDto.getConnectionId());
-        return rs;
+        return service.auth(authRqDto);
     }
 
     @KafkaHandler
     @SendTo("t-node")
-    public UpdateUserListInfoRsDto sendMeUserInfo(SendMeUserInfoRqDto sendMeUserInfoDto) {
+    public UpdateUserListInfoRsDto sendMeUserInfo(SendMeUserListInfoRqDto sendMeUserInfoDto) {
         return service.getUsers(sendMeUserInfoDto);
     }
 

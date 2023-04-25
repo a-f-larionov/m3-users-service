@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import m3.users.dto.rq.AuthRqDto;
 import m3.users.services.SocNetService;
 
-@Service
+@Service("socNetStandalone")
 public class SocNetStandaloneServiceImpl implements SocNetService {
 
     @Override

@@ -3,7 +3,7 @@ package m3.users.services;
 import m3.users.commons.ErrorCodes;
 import m3.users.commons.HttpExceptionError;
 import m3.users.dto.rq.AuthRqDto;
-import m3.users.dto.rq.SendMeUserInfoRqDto;
+import m3.users.dto.rq.SendMeUserListInfoRqDto;
 import m3.users.dto.rq.UpdateLastLogoutRqDto;
 import m3.users.dto.rs.AuthSuccessRsDto;
 import m3.users.dto.rs.UpdateUserInfoRsDto;
@@ -97,7 +97,7 @@ public class UserServiceTest {
         // given
         var toUserId = 1L;
         var ids = List.of(1L, 2L, 3L);
-        var rq = SendMeUserInfoRqDto.builder()
+        var rq = SendMeUserListInfoRqDto.builder()
                 .toUserId(toUserId)
                 .ids(ids)
                 .build();

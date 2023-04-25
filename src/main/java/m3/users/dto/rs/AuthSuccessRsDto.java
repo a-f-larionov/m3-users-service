@@ -24,7 +24,4 @@ public class AuthSuccessRsDto {
     private Long fullRecoveryTime;
 
     private Long connectionId;
-
-    private int jkl = 5;
-
 }

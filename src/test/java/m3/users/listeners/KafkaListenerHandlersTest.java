@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import m3.users.dto.rq.AuthRqDto;
-import m3.users.dto.rq.SendMeUserInfoRqDto;
+import m3.users.dto.rq.SendMeUserListInfoRqDto;
 import m3.users.dto.rq.UpdateLastLogoutRqDto;
 import m3.users.dto.rs.AuthSuccessRsDto;
 import m3.users.dto.rs.UpdateUserListInfoRsDto;
@@ -43,7 +43,7 @@ public class KafkaListenerHandlersTest {
     @Test
     void sendMeUserInfo() {
         // given
-        var rq = new SendMeUserInfoRqDto();
+        var rq = new SendMeUserListInfoRqDto();
         var rs = new UpdateUserListInfoRsDto();
         when(service.getUsers(any())).thenReturn(rs);
 

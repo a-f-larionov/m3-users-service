@@ -8,12 +8,11 @@ import m3.users.services.SocNetSwitcher;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
-@Service
+@Service("socNet")
 public class SocNetServiceImpl implements SocNetSwitcher, SocNetService {
 
-
     private final SocNetService socNetVK;
-    private final SocNetStandaloneServiceImpl socNetStandalone;
+    private final SocNetService socNetStandalone;
 
     @Override
     public SocNetService getByType(SocNetType socNetType) {

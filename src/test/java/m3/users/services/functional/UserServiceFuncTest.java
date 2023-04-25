@@ -24,6 +24,13 @@ public class UserServiceFuncTest {
     JdbcTemplate jdbcTemplate;
 
     @Test
+    public void sendMeUserListInfo() {
+        // given
+        // when
+        // then
+    }
+
+    @Test
     public void authNewUser() {
         // given
         var testStart = System.currentTimeMillis() / 1000;
@@ -43,7 +50,7 @@ public class UserServiceFuncTest {
         assertThat(rsDto.getNextPointId()).isEqualTo(1);
         assertThat(rsDto.getFullRecoveryTime()).isGreaterThanOrEqualTo(testStart);
 
-        assertRsDtoEqualsDBState(rsDto);
+        assertRsDtoEqualsDBState(rsDto, authRqDto.getConnectionId());
     }
 
 
@@ -73,10 +80,10 @@ public class UserServiceFuncTest {
         assertThat(rsDto.getFullRecoveryTime()).isEqualTo(created.getFullRecoveryTime());
         assertThat(rsDto.getNextPointId()).isEqualTo(1);
 
-        assertRsDtoEqualsDBState(rsDto);
+        assertRsDtoEqualsDBState(rsDto, authRqDto.getConnectionId());
     }
 
-    private void assertRsDtoEqualsDBState(AuthSuccessRsDto rsDto) {
+    private void assertRsDtoEqualsDBState(AuthSuccessRsDto rsDto, Long connectionId) {
         Map<String, Object> userDb = jdbcTemplate.queryForMap("SELECT * FROM users WHERE id = ?", rsDto.getUserId());
 
         assertThat(rsDto.getUserId()).isEqualTo(userDb.get("ID"));
@@ -87,6 +94,7 @@ public class UserServiceFuncTest {
         assertThat(rsDto.getLogoutTm()).isEqualTo(userDb.get("LOGOUT_TM"));
         assertThat(rsDto.getNextPointId()).isEqualTo(userDb.get("NEXTPOINTID"));
         assertThat(rsDto.getFullRecoveryTime()).isEqualTo(userDb.get("FULLRECOVERYTIME"));
+        assertThat(rsDto.getConnectionId()).isEqualTo(connectionId);
     }
 
     private AuthRqDto createNewAuthRqDto(Long socNetUserId) {
@@ -97,6 +105,7 @@ public class UserServiceFuncTest {
                 .socNetUserId(socNetUserId)
                 .authKey(calcAuthKey(socNetUserId, appId, secretKey))
                 .appId(appId)
+                .connectionId(123L)
                 .build();
     }
 

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SendMeUserInfoRqDto {
+public class SendMeUserListInfoRqDto {
 
     private Long toUserId;
     private List<Long> ids;

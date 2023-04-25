@@ -13,9 +13,9 @@ public interface UsersMapper {
 
     UpdateUserInfoRsDto entityToDto(UserEntity user);
 
-    @Mapping(target = "userId", source = "id")
-    @Mapping(target = "socNetType", source = "socNetTypeId")
-    AuthSuccessRsDto entityToAuthSuccessRsDto(UserEntity outUser);
+    @Mapping(target = "userId", source = "entity.id")
+    @Mapping(target = "socNetType", source = "entity.socNetTypeId")
+    AuthSuccessRsDto entityToAuthSuccessRsDto(UserEntity entity, Long connectionId);
 
     default SocNetType map(Long value) {
         return SocNetType.of(value);
@@ -25,6 +25,8 @@ public interface UsersMapper {
     @Mapping(target = "loginTm", source = "currentTm")
     @Mapping(target = "fullRecoveryTime", source = "currentTm")
     @Mapping(target = "socNetTypeId", source = "authRqDto.socNetType")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "logoutTm", ignore = true)
     UserEntity forAuthNewUser(AuthRqDto authRqDto, Long currentTm, Long nextPointId);
 
     default Long map(SocNetType socNetType) {

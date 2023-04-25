@@ -1,15 +1,17 @@
 package m3.users.services.impl;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import m3.users.commons.HttpExceptionError;
 import m3.users.dto.rq.AuthRqDto;
-import m3.users.dto.rq.SendMeUserInfoRqDto;
+import m3.users.dto.rq.SendMeUserListInfoRqDto;
 import m3.users.dto.rq.UpdateLastLogoutRqDto;
 import m3.users.dto.rs.AuthSuccessRsDto;
 import m3.users.dto.rs.UpdateUserListInfoRsDto;
 import m3.users.entities.UserEntity;
 import m3.users.mappers.UsersMapper;
 import m3.users.repositories.UsersRepository;
+import m3.users.services.SocNetService;
 import m3.users.services.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ import java.util.Optional;
 import static m3.users.commons.ErrorCodes.AUTH_FAILED;
 
 @AllArgsConstructor
+@Slf4j
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
@@ -28,7 +31,8 @@ public class UserServiceImpl implements UserService {
 
     private final UsersRepository usersRepository;
     private final UsersMapper mapper;
-    private final SocNetServiceImpl socNet;
+    private final SocNetService socNet;
+    //private final LogService logg;
 
     public AuthSuccessRsDto auth(AuthRqDto authRqDto) {
 
@@ -57,12 +61,14 @@ public class UserServiceImpl implements UserService {
             outUser.setLoginTm(newLoginTime);
         }
 
+        //log.warn("df)");
+        //telega.send("🥰" +url);
         //socNet.getUrl();
         //// var url = SocNet(user.socNetTypeId).getUserProfileUrl(user.socNetUserId);
         //    // Logs.log("🥰 ", Logs.LEVEL_NOTIFY, url, Logs.CHANNEL_TELEGRAM);
 
 
-        return mapper.entityToAuthSuccessRsDto(outUser);
+        return mapper.entityToAuthSuccessRsDto(outUser, authRqDto.getConnectionId());
     }
 
     private void updateLogin(Long id, Long newLoginTime) {
@@ -70,23 +76,12 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    /**
-     * // * Авторизация пользователя из соц сети вКонтакте.
-     * // * @param socNetUserId
-     * // * @param authParams
-     * // * @param cntx
-     * //
-     */
-
-
-    public UpdateUserListInfoRsDto getUsers(SendMeUserInfoRqDto rq) {
+    public UpdateUserListInfoRsDto getUsers(SendMeUserListInfoRqDto rq) {
 
         List<UserEntity> usersList = usersRepository.findAllByIdIn(rq.getIds());
 
         var list = usersList.stream()
-                .map(user -> {
-                    return mapper.entityToDto(user);
-                })
+                .map(user -> mapper.entityToDto(user))
                 .toList();
 
         return UpdateUserListInfoRsDto.builder()
@@ -96,6 +91,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public void updateLastLogout(UpdateLastLogoutRqDto rq) {
-        usersRepository.updateLastLogout(rq.getUserId(), System.currentTimeMillis());
+        //@todo moeve mills/1000 to one method
+        usersRepository.updateLastLogout(rq.getUserId(), System.currentTimeMillis() / 1000);
     }
 }
