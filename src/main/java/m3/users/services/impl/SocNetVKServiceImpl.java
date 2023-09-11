@@ -17,7 +17,6 @@ public class SocNetVKServiceImpl implements SocNetService {
         this.secretKey = secretKey;
     }
 
-
     public boolean checkAuth(AuthRqDto authRqDto) {
 
         var expectedAuthKey = calcSign(authRqDto);

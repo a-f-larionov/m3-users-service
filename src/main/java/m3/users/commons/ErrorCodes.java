@@ -5,7 +5,6 @@ import lombok.Getter;
 @Getter
 public enum ErrorCodes {
 
-
     AUTH_FAILED(1, "Авторизация не удалась.");
 
     private Integer code;

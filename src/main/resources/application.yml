@@ -10,5 +10,5 @@ spring:
 
 socnet:
   vk:
-    appId:
-    secretKey: 123
+    appId: ${VK_APP_ID}
+    secretKey: ${VK_SECRET_KEY}
