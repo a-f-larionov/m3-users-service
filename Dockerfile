@@ -1,9 +1,8 @@
 FROM gradle:7.6-jdk17 as builder
 WORKDIR /var/workdir
-COPY src  .
-COPY gradle .
-COPY build.gradle .
-COPY settings.gradle .
+COPY build.gradle settings.gradle ./
+COPY src ./src
+RUN ls
 RUN bash -c "gradle build -x test"
 
 FROM amazoncorretto:17
