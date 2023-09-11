@@ -3,11 +3,10 @@ spring:
   kafka:
     bootstrap-servers: kafka:9092
 
-  
   datasource:
-    url: jdbc:mysql://mysql:3306/local_database
-    username: local_user
-    password: local_password
+    url: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
 
 socnet:
   vk:
