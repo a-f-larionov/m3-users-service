@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "socnet.vk.appId",
+      "type": "java.lang.String",
+      "description": "Description for socnet.vk.appId."
+    },
+    {
+      "name": "filename",
+      "type": "java.lang.String",
+      "description": "Description for filename, Docker use it."
+    }
+  ]
+}

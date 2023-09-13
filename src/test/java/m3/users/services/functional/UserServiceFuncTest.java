@@ -1,5 +1,6 @@
 package m3.users.services.functional;
 
+import m3.users.BaseSpringBootTest;
 import m3.users.dto.rq.AuthRqDto;
 import m3.users.dto.rs.AuthSuccessRsDto;
 import m3.users.enums.SocNetType;
@@ -14,8 +15,10 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(properties = "logging.level.org.hibernate.SQL=TRACE")
-public class UserServiceFuncTest {
+@SpringBootTest(properties = {
+        "logging.level.org.hibernate.SQL=TRACE"
+})
+public class UserServiceFuncTest extends BaseSpringBootTest {
 
     @Autowired
     UserService userService;
@@ -52,7 +55,6 @@ public class UserServiceFuncTest {
 
         assertRsDtoEqualsDBState(rsDto, authRqDto.getConnectionId());
     }
-
 
     @Test
     public void authExistingUser() {
@@ -98,7 +100,7 @@ public class UserServiceFuncTest {
     }
 
     private AuthRqDto createNewAuthRqDto(Long socNetUserId) {
-        var secretKey = "123";
+        var secretKey = "secretKey";
         var appId = 123L;
         return AuthRqDto.builder()
                 .socNetType(SocNetType.VK)
@@ -114,6 +116,6 @@ public class UserServiceFuncTest {
     }
 
     private String calcAuthKey(Long socNetUserId, Long appId, String secretKey) {
-        return DigestUtils.md5DigestAsHex((appId.toString() + socNetUserId.toString() + secretKey).getBytes());
+        return DigestUtils.md5DigestAsHex((appId.toString() + "_" + socNetUserId.toString() + "_" + secretKey).getBytes());
     }
 }

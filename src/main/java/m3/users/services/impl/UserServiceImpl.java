@@ -36,17 +36,17 @@ public class UserServiceImpl implements UserService {
 
     public AuthSuccessRsDto auth(AuthRqDto authRqDto) {
 
-        var authSuccessed = socNet.checkAuth(authRqDto);
-        if (!authSuccessed) {
+        var authSucceeded = socNet.checkAuth(authRqDto);
+        if (!authSucceeded) {
             //@todo class ERRORS
             throw new HttpExceptionError(AUTH_FAILED);
         }
         UserEntity outUser;
 
-        Optional<UserEntity> exitendUser = usersRepository
+        Optional<UserEntity> existendUser = usersRepository
                 .findBySocNetTypeIdAndSocNetUserId(authRqDto.getSocNetType().getId(), authRqDto.getSocNetUserId());
 
-        if (exitendUser.isEmpty()) {
+        if (existendUser.isEmpty()) {
             var currentMills = System.currentTimeMillis();
             var entitiy = mapper.forAuthNewUser(
                     authRqDto,
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
             );
             outUser = usersRepository.save(entitiy);
         } else {
-            outUser = exitendUser.orElseThrow();
+            outUser = existendUser.orElseThrow();
             var newLoginTime = System.currentTimeMillis() / 1000;
             updateLogin(outUser.getId(), newLoginTime);
             outUser.setLoginTm(newLoginTime);
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
         List<UserEntity> usersList = usersRepository.findAllByIdIn(rq.getIds());
 
         var list = usersList.stream()
-                .map(user -> mapper.entityToDto(user))
+                .map(mapper::entityToDto)
                 .toList();
 
         return UpdateUserListInfoRsDto.builder()

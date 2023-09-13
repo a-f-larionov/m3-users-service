@@ -4,7 +4,7 @@ spring:
     bootstrap-servers: kafka:9092
 
   datasource:
-    url: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}
+    url: ${DATASOURCE_URL:jdbc:mysql://localhost:33306/junit_local_tri_base}
     username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}
 

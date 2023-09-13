@@ -36,7 +36,7 @@ private final SocNetService socNetVK = new SocNetVKServiceImpl("secretKey");
     @Test
     void socNetVKAuthWithCorrectData() {
         // given
-        var authRqDto = createAuthPqDto(SocNetType.VK, "e994a10fa9faf8c60e1351398819d3a4");
+        var authRqDto = createAuthPqDto(SocNetType.VK, "cbabcb24c5a1d3bdaafc07230fd8da15");
 
         // when
         var actual = socNet.checkAuth(authRqDto);

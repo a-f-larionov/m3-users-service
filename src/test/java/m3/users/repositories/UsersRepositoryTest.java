@@ -1,21 +1,22 @@
 package m3.users.repositories;
 
+import m3.users.BaseDataJpaTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DataJpaTest(properties = {"logging.level.org.springframework.jdbc.core=DEBUG", "logging.level.org.hibernate.SQL=DEBUG"})
+@DataJpaTest(properties = {
+        "logging.level.org.springframework.jdbc.core=DEBUG",
+        "logging.level.org.hibernate.SQL=DEBUG"
+})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ActiveProfiles("test")
 @Commit
-public class UsersRepositoryTest {
+public class UsersRepositoryTest extends BaseDataJpaTest {
 
     @Autowired
     private UsersRepository usersRepository;
@@ -55,7 +56,6 @@ public class UsersRepositoryTest {
         assertEquals(1, result);
         Long login_tm = (long) jdbcTemplate.queryForMap("SELECT login_tm FROM users WHERE id=" + userId).get("login_tm");
         assertEquals(newLoginTS, login_tm);
-
     }
 
 }
