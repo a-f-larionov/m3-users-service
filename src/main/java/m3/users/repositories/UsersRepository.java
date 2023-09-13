@@ -22,4 +22,12 @@ public interface UsersRepository extends CrudRepository<UserEntity, Long> {
     int updateLogin(@Param("id") Long id, @Param("login_tm") Long newLoginTimeStamp);
 
     Optional<UserEntity> findBySocNetTypeIdAndSocNetUserId(Long socNetTypeId, Long socNetUserId);
+
+    @Query(value =
+            "SELECT id FROM users " +
+                    "WHERE nextPointId >= ?1 " +
+                    "AND nextPointId <= ?2 " +
+                    "AND socNetUserId IN (?3)",
+            nativeQuery = true)
+    List<Long> gotMapFriends(Long firstPointId, Long lastPointId, List<Long> fids);
 }

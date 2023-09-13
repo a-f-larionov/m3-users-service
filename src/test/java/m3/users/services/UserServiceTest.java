@@ -3,9 +3,11 @@ package m3.users.services;
 import m3.users.commons.ErrorCodes;
 import m3.users.commons.HttpExceptionError;
 import m3.users.dto.rq.AuthRqDto;
+import m3.users.dto.rq.SendMeMapFriendsRqDto;
 import m3.users.dto.rq.SendMeUserListInfoRqDto;
 import m3.users.dto.rq.UpdateLastLogoutRqDto;
 import m3.users.dto.rs.AuthSuccessRsDto;
+import m3.users.dto.rs.GotMapFriendIdsRsDto;
 import m3.users.dto.rs.UpdateUserInfoRsDto;
 import m3.users.dto.rs.UpdateUserListInfoRsDto;
 import m3.users.entities.UserEntity;
@@ -139,6 +141,39 @@ public class UserServiceTest {
         // then
         verify(repo).updateLastLogout(eq(userId), any());
     }
+
+    @Test
+    void getMapFriends() {
+        // given
+        Long toUserId = 123L;
+        Long mapId = 10L;
+        List<Long> fids = List.of(1L, 2L, 3L);
+        List<Long> ids = List.of(1L, 2L);
+        var rq = SendMeMapFriendsRqDto.builder()
+                .toUserId(toUserId)
+                .mapId(mapId)
+                .fids(fids)
+                .build();
+        var rs = GotMapFriendIdsRsDto.builder()
+                .toUserId(toUserId)
+                .mapId(mapId)
+                .ids(ids)
+                .build();
+
+        when(repo.gotMapFriends(any(), any(), any())).thenReturn(ids);
+
+        // when
+        var result = service.getMapFriends(rq);
+
+        // then
+        verify(repo).gotMapFriends(eq(163L), eq(180L), eq(fids));
+
+
+        assertThat(result)
+                .isInstanceOf(GotMapFriendIdsRsDto.class)
+                .isEqualTo(rs);
+    }
+
 
     private UserEntity createUserEntity(Long id) {
         var oneEntity = new UserEntity();

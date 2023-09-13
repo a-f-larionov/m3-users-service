@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import m3.users.dto.rq.SendMeMapFriendsRqDto;
 import m3.users.enums.SocNetType;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -41,14 +42,14 @@ public class KafkaListenerHandlersTest {
     }
 
     @Test
-    void sendMeUserInfo() {
+    void sendMeUserListInfo() {
         // given
         var rq = new SendMeUserListInfoRqDto();
         var rs = new UpdateUserListInfoRsDto();
         when(service.getUsers(any())).thenReturn(rs);
 
         // when
-        var result = listener.sendMeUserInfo(rq);
+        var result = listener.sendMeUserListInfo(rq);
 
         // then
         verify(service).getUsers(eq(rq));
@@ -65,6 +66,18 @@ public class KafkaListenerHandlersTest {
 
         // then
         verify(service).updateLastLogout(eq(rq));
+    }
+
+    @Test
+    void sendMeMapFriends() {
+        // given
+        var rq = SendMeMapFriendsRqDto.builder().build();
+
+        // when
+        listener.sendMeMapFriends(rq);
+
+        // then
+        verify(service).getMapFriends(eq(rq));
     }
 
     private AuthSuccessRsDto createAuthSuccessRsDto() {

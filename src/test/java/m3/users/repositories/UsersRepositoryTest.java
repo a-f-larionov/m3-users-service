@@ -8,6 +8,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Commit;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest(properties = {
@@ -27,8 +29,8 @@ public class UsersRepositoryTest extends BaseDataJpaTest {
     @Test
     void testUpdateLastLogout() {
         // given
-        jdbcTemplate.update("INSERT INTO users (socNetTypeId, socNetUserId) VALUES (?,?)", 1, 1);
-        jdbcTemplate.update("INSERT INTO users (socNetTypeId, socNetUserId) VALUES (?,?)", 1, 2);
+        jdbcTemplate.update("INSERT INTO users (socNetTypeId, socNetUserId) VALUES (?, ?)", 1, 1);
+        jdbcTemplate.update("INSERT INTO users (socNetTypeId, socNetUserId) VALUES (?, ?)", 1, 2);
         var userId = (Long) jdbcTemplate.queryForMap("SELECT MAX(id) as maxId FROM users").get("maxId");
         var newLogoutTS = System.currentTimeMillis() / 1000;
 
@@ -44,8 +46,8 @@ public class UsersRepositoryTest extends BaseDataJpaTest {
     @Test
     void testUpdateLogin() {
         // given
-        jdbcTemplate.update("INSERT INTO users (socNetTypeId, socNetUserId) VALUES (?,?)", 1, 1);
-        jdbcTemplate.update("INSERT INTO users (socNetTypeId, socNetUserId) VALUES (?,?)", 1, 2);
+        jdbcTemplate.update("INSERT INTO users (socNetTypeId, socNetUserId) VALUES (?, ?)", 1, 1);
+        jdbcTemplate.update("INSERT INTO users (socNetTypeId, socNetUserId) VALUES (?, ?)", 1, 2);
         var userId = (Long) jdbcTemplate.queryForMap("SELECT MAX(id) as maxId FROM users").get("maxId");
         var newLoginTS = System.currentTimeMillis() / 1000;
 
@@ -58,4 +60,22 @@ public class UsersRepositoryTest extends BaseDataJpaTest {
         assertEquals(newLoginTS, login_tm);
     }
 
+    @Test
+    void testGotMapFriends() {
+        // given
+        jdbcTemplate.update("DELETE FROM users ");
+        jdbcTemplate.update("INSERT INTO users(socNetTypeId, socNetUserId, nextPointId) VALUES(?, ?, ?)", 1, 1, 1);
+        jdbcTemplate.update("INSERT INTO users(socNetTypeId, socNetUserId, nextPointId) VALUES(?, ?, ?)", 1, 1, 9);
+        jdbcTemplate.update("INSERT INTO users(socNetTypeId, socNetUserId, nextPointId) VALUES(?, ?, ?)", 1, 2, 10);
+        jdbcTemplate.update("INSERT INTO users(socNetTypeId, socNetUserId, nextPointId) VALUES(?, ?, ?)", 1, 2, 50);
+        jdbcTemplate.update("INSERT INTO users(socNetTypeId, socNetUserId, nextPointId) VALUES(?, ?, ?)", 1, 3, 100);
+        jdbcTemplate.update("INSERT INTO users(socNetTypeId, socNetUserId, nextPointId) VALUES(?, ?, ?)", 1, 3, 101);
+        jdbcTemplate.update("INSERT INTO users(socNetTypeId, socNetUserId, nextPointId) VALUES(?, ?, ?)", 1, 3, 1000);
+
+        // when
+        List<Long> ids = usersRepository.gotMapFriends(10L, 100L, List.of(1L, 2L, 3L));
+
+        // then
+        assertEquals(3, ids.size());
+    }
 }

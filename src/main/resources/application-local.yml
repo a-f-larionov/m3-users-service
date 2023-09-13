@@ -1,0 +1,15 @@
+filename: app
+spring:
+  kafka:
+    bootstrap-servers: kafka:9092
+
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/local_tri_base
+    username: local_user
+    password: local_password
+
+socnet:
+  vk:
+    appId: 123
+    secretKey: secretKey

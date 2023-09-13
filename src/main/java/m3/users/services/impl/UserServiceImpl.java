@@ -4,15 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import m3.users.commons.HttpExceptionError;
 import m3.users.dto.rq.AuthRqDto;
+import m3.users.dto.rq.SendMeMapFriendsRqDto;
 import m3.users.dto.rq.SendMeUserListInfoRqDto;
 import m3.users.dto.rq.UpdateLastLogoutRqDto;
 import m3.users.dto.rs.AuthSuccessRsDto;
+import m3.users.dto.rs.GotMapFriendIdsRsDto;
 import m3.users.dto.rs.UpdateUserListInfoRsDto;
 import m3.users.entities.UserEntity;
 import m3.users.mappers.UsersMapper;
 import m3.users.repositories.UsersRepository;
 import m3.users.services.SocNetService;
 import m3.users.services.UserService;
+import m3.users.settings.MapSettings;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -93,5 +96,21 @@ public class UserServiceImpl implements UserService {
     public void updateLastLogout(UpdateLastLogoutRqDto rq) {
         //@todo moeve mills/1000 to one method
         usersRepository.updateLastLogout(rq.getUserId(), System.currentTimeMillis() / 1000);
+    }
+
+    @Override
+    public GotMapFriendIdsRsDto getMapFriends(SendMeMapFriendsRqDto sendMeMapFriendsRqDto) {
+
+        var ids = usersRepository.gotMapFriends(
+                MapSettings.getFirstPointId(sendMeMapFriendsRqDto.mapId),
+                MapSettings.getLastPointId(sendMeMapFriendsRqDto.mapId),
+                sendMeMapFriendsRqDto.fids
+        );
+
+        return GotMapFriendIdsRsDto.builder()
+                .toUserId(sendMeMapFriendsRqDto.toUserId)
+                .mapId(sendMeMapFriendsRqDto.mapId)
+                .ids(ids)
+                .build();
     }
 }

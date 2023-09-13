@@ -2,9 +2,11 @@ package m3.users.listeners;
 
 import lombok.AllArgsConstructor;
 import m3.users.dto.rq.AuthRqDto;
+import m3.users.dto.rq.SendMeMapFriendsRqDto;
 import m3.users.dto.rq.SendMeUserListInfoRqDto;
 import m3.users.dto.rq.UpdateLastLogoutRqDto;
 import m3.users.dto.rs.AuthSuccessRsDto;
+import m3.users.dto.rs.GotMapFriendIdsRsDto;
 import m3.users.dto.rs.UpdateUserListInfoRsDto;
 import m3.users.services.impl.UserServiceImpl;
 import org.springframework.kafka.annotation.KafkaHandler;
@@ -27,8 +29,14 @@ public class KafkaListenerHandlers {
 
     @KafkaHandler
     @SendTo("t-node")
-    public UpdateUserListInfoRsDto sendMeUserInfo(SendMeUserListInfoRqDto sendMeUserInfoDto) {
-        return service.getUsers(sendMeUserInfoDto);
+    public UpdateUserListInfoRsDto sendMeUserListInfo(SendMeUserListInfoRqDto sendMeUserListInfoDto) {
+        return service.getUsers(sendMeUserListInfoDto);
+    }
+
+    @KafkaHandler
+    @SendTo("t-node")
+    public GotMapFriendIdsRsDto sendMeMapFriends(SendMeMapFriendsRqDto sendMeMapFriendsRqDto){
+       return service.getMapFriends(sendMeMapFriendsRqDto);
     }
 
     @KafkaHandler
