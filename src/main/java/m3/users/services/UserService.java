@@ -19,9 +19,9 @@ public interface UserService {
 
     GotTopUsersRsDto getTopUsersRsDto(Long userId, List<Long> ids);
 
-    SetOneHealthHideRsDto healthBack(Long userId);
+    SetOneHealthHideRsDto healthUp(Long userId);
 
     SetOneHealthHideRsDto healthDown(Long userId);
 
-    SetOneHealthHideRsDto zeroLife(Long userId);
+    UpdateUserInfoRsDto zeroLife(Long userId);
 }

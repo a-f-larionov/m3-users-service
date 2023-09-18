@@ -53,8 +53,8 @@ public class KafkaListenerHandlers {
 
     @KafkaHandler
     @SendTo("t-node")
-    public SetOneHealthHideRsDto healthBack(HealthBackRqDto rq) {
-        return service.healthBack(rq.getUserId());
+    public SetOneHealthHideRsDto healthUp(HealthBackRqDto rq) {
+        return service.healthUp(rq.getUserId());
     }
 
     @KafkaHandler
@@ -65,7 +65,7 @@ public class KafkaListenerHandlers {
 
     @KafkaHandler
     @SendTo("t-node")
-    public SetOneHealthHideRsDto zeroLife(ZeroLifeRqDto rq){
+    public UpdateUserInfoRsDto zeroLife(ZeroLifeRqDto rq) {
         return service.zeroLife(rq.getUserId());
     }
 }

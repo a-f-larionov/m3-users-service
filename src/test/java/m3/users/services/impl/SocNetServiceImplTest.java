@@ -1,15 +1,13 @@
-package m3.users.services;
+package m3.users.services.impl;
 
 import m3.users.dto.rq.AuthRqDto;
 import m3.users.enums.SocNetType;
-import m3.users.services.impl.SocNetServiceImpl;
-import m3.users.services.impl.SocNetStandaloneServiceImpl;
-import m3.users.services.impl.SocNetVKServiceImpl;
+import m3.users.services.SocNetService;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SocNetServiceTest {
+public class SocNetServiceImplTest {
 
 private final SocNetService socNetVK = new SocNetVKServiceImpl("secretKey");
     private final SocNetStandaloneServiceImpl socNetStandalone = new SocNetStandaloneServiceImpl();

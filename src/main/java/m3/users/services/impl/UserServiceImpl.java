@@ -147,18 +147,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public synchronized SetOneHealthHideRsDto healthBack(Long userId) {
+    public synchronized SetOneHealthHideRsDto healthUp(Long userId) {
 
         Optional<UserEntity> optionalUser = usersRepository.findById(userId);
 
         if (optionalUser.isPresent()) {
             var user = optionalUser.get();
-            if (healthService.isMaxHealths(user)) {
-                healthService.changeHealths(user, -1);
+            if (!healthService.isMaxHealths(user)) {
+                healthService.setHealths(user,
+                        healthService.getHealths(user) + 1);
                 usersRepository.updateHealth(user.getId(), user.getFullRecoveryTime());
             }
             return SetOneHealthHideRsDto.builder()
                     .userId(userId)
+                    .oneHealthHide(false)
                     .fullRecoveryTime(user.getFullRecoveryTime())
                     .build();
         }
@@ -168,42 +170,41 @@ public class UserServiceImpl implements UserService {
     @Override
     public SetOneHealthHideRsDto healthDown(Long userId) {
 
-        // lock!
+        Optional<UserEntity> optionalUser = usersRepository.findById(userId);
 
-        //https://www.baeldung.com/java-acquire-lock-by-key
-//        // locking
-//        Optional<UserEntity> byId = usersRepository.findById(rq.getUserId());
-//
-//        var user = byId.get();
-//
-//        healthService.isMaxHealths(user);
-//        healthService.changeHealths(user, -1);
-//        usersRepository.updateHealthAndStartTime(user.getId(), user.getFullRecoveryTime());
-
-
-//        LOCK.acquire(Keys.health(cntx.user.id), function (done) {
-//            //@todo auto LOCK timeout(with keys!)
-//            setTimeout(done, 5 * 60 * 1000);
-//            DataUser.getById(cntx.user.id, function (user) {
-//                if (LogicHealth.getHealths(user) > 0) {
-//                    LogicHealth.decrementHealth(user, 1);
-//                    DataUser.updateHealthAndStartTime(user, function () {
-//                        CAPIUser.setOneHealthHide(cntx.user.id, true, user.fullRecoveryTime);
-//                    }
-//                    );
-//                    done();
-//                } else {
-//                    done();
-//                }
-//            })
-//        });
-        return SetOneHealthHideRsDto.builder()
-                .userId(userId)
-                .build();
+        if (optionalUser.isPresent()) {
+            var user = optionalUser.get();
+            if (!healthService.getHealths(user).equals(0L)) {
+                healthService.setHealths(user,
+                        healthService.getHealths(user) - 1);
+                usersRepository.updateHealth(user.getId(), user.getFullRecoveryTime());
+            }
+            return SetOneHealthHideRsDto.builder()
+                    .userId(userId)
+                    .oneHealthHide(true)
+                    .fullRecoveryTime(user.getFullRecoveryTime())
+                    .build();
+        }
+        return null;
     }
 
     @Override
-    public SetOneHealthHideRsDto zeroLife(Long userId) {
+    public UpdateUserInfoRsDto zeroLife(Long userId) {
+
+
+        Optional<UserEntity> optionalUser = usersRepository.findById(userId);
+
+        if (optionalUser.isPresent()) {
+            var user = optionalUser.get();
+
+            if (!user.getSocNetTypeId().equals(SocNetType.Standalone.getId())) {
+                return null;
+            }
+            healthService.setHealths(user, 0L);
+            usersRepository.updateHealth(user.getId(), user.getFullRecoveryTime());
+
+            return mapper.entityToDto(user);
+        }
         return null;
     }
 }

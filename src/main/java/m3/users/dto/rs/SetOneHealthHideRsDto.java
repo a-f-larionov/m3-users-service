@@ -11,5 +11,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SetOneHealthHideRsDto extends UserIdRsDto {
+    public boolean oneHealthHide;
     public Long fullRecoveryTime;
 }

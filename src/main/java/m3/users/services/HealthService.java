@@ -5,5 +5,7 @@ import m3.users.entities.UserEntity;
 public interface HealthService {
     boolean isMaxHealths(UserEntity user);
 
-    void changeHealths(UserEntity user, int i);
+    void setHealths(UserEntity user, Long value);
+
+    Long getHealths(UserEntity user);
 }

@@ -14,34 +14,31 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class HealthServiceImpl implements HealthService {
 
+    @Override
+    public boolean isMaxHealths(UserEntity user) {
+        return getHealths(user).equals(CommonSettings.HEALTH_MAX);
+    }
+
+    @Override
+    public void setHealths(UserEntity user, Long value) {
+        user.setFullRecoveryTime(getTime() -
+                value * CommonSettings.HEALTH_RECOVERY_TIME +
+                (CommonSettings.HEALTH_MAX * CommonSettings.HEALTH_RECOVERY_TIME));
+    }
+
+
     public Long getHealths(UserEntity user) {
 
-        var fullRecoveryTime = user.getFullRecoveryTime();
-        var now = 0L;
-        var recoveryTime = 0L;
-        var timeLeft = 0L;
-
-        now = getTime();
-        recoveryTime = CommonSettings.HEALTH_RECOVERY_TIME;
-
-        timeLeft = fullRecoveryTime - now;
+        double timeLeft = (double) user.getFullRecoveryTime() - getTime();
 
         if (timeLeft <= 0) return CommonSettings.HEALTH_MAX;
 
-        return Math.max(0L, CommonSettings.HEALTH_MAX - timeLeft / recoveryTime);
+        var healthsLeft = Math.floor(CommonSettings.HEALTH_MAX - (timeLeft / CommonSettings.HEALTH_RECOVERY_TIME));
+
+        return Math.max(0L, (long) healthsLeft);
     }
 
     private long getTime() {
         return System.currentTimeMillis() / 1000L;
-    }
-
-    @Override
-    public boolean isMaxHealths(UserEntity user) {
-        return false;
-    }
-
-    @Override
-    public void changeHealths(UserEntity user, int i) {
-
     }
 }

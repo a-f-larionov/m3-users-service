@@ -109,15 +109,15 @@ public class KafkaListenerHandlersTest {
     }
 
     @Test
-    void healthBack() {
+    void healthUp() {
         // given
         var rq = HealthBackRqDto.builder().build();
 
         // when
-        listener.healthBack(rq);
+        listener.healthUp(rq);
 
         // then
-        verify(service).healthBack(eq(rq.getUserId()));
+        verify(service).healthUp(eq(rq.getUserId()));
     }
 
     @Test

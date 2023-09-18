@@ -8,7 +8,6 @@ import m3.users.enums.SocNetType;
 import m3.users.services.UserService;
 import m3.users.settings.CommonSettings;
 import m3.users.settings.MapSettings;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -264,15 +263,45 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
     }
 
     @Test
-    @Disabled
-    public void healthBack() {
+    public void heathUp() {
+        // given
+        deleteAllUsers();
+        var userId = createUser(1000L);
+        var maxHealths = CommonSettings.HEALTH_MAX;
+        // set 0 healts
+        jdbcTemplate.update("UPDATE users SET fullRecoveryTime = ? WHERE id = ? ",
+                (System.currentTimeMillis() / 1000L) + CommonSettings.HEALTH_RECOVERY_TIME * maxHealths
+                , userId);
 
+        // when
+        SetOneHealthHideRsDto actualRs = userService.healthUp(userId);
+
+        // then
+        assertThat(actualRs.getUserId()).isEqualTo(userId);
+        assertThat(actualRs.getFullRecoveryTime()).isEqualTo(
+                (System.currentTimeMillis() / 1000L) + CommonSettings.HEALTH_RECOVERY_TIME * (maxHealths - 1)
+        );
     }
 
     @Test
-    @Disabled
     public void healthDown() {
+        // given
+        deleteAllUsers();
+        var userId = createUser(1000L);
+        var maxHealths = CommonSettings.HEALTH_MAX;
+        // set 0 healts
+        jdbcTemplate.update("UPDATE users SET fullRecoveryTime = ? WHERE id = ? ",
+                (System.currentTimeMillis() / 1000L) + CommonSettings.HEALTH_RECOVERY_TIME * 2
+                , userId);
 
+        // when
+        SetOneHealthHideRsDto actualRs = userService.healthDown(userId);
+
+        // then
+        assertThat(actualRs.getUserId()).isEqualTo(userId);
+        assertThat(actualRs.getFullRecoveryTime()).isEqualTo(
+                (System.currentTimeMillis() / 1000L) + CommonSettings.HEALTH_RECOVERY_TIME * 3
+        );
     }
 
     private UpdateUserInfoRsDto createUserAndSetPointIdAndReturnRsDto(Long socNetId, Long nextPointId) {

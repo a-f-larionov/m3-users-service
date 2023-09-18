@@ -1,4 +1,4 @@
-package m3.users.services;
+package m3.users.services.impl;
 
 import m3.users.commons.ErrorCodes;
 import m3.users.commons.HttpExceptionError;
@@ -8,11 +8,9 @@ import m3.users.entities.UserEntity;
 import m3.users.enums.SocNetType;
 import m3.users.mappers.UsersMapper;
 import m3.users.repositories.UsersRepository;
-import m3.users.services.impl.SocNetServiceImpl;
-import m3.users.services.impl.UserServiceImpl;
+import m3.users.services.HealthService;
 import m3.users.settings.CommonSettings;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-public class UserServiceTest {
+public class UserServiceImplTest {
 
     private final UsersMapper mapper = Mockito.mock(UsersMapper.class);
     private final UsersRepository repo = Mockito.mock(UsersRepository.class);
@@ -249,38 +247,54 @@ public class UserServiceTest {
     }
 
     @Test
-    @Disabled
     void healthBack() {
         // given
         var userId = 123L;
         var rq = HealthBackRqDto.builder().userId(userId).build();
-        var expectedRs = SetOneHealthHideRsDto.builder().userId(userId).build();
-        when(repo.findById(any())).thenReturn(Optional.of(UserEntity.builder().build()));
+        var fullRecoveryTime = (System.currentTimeMillis() / 1000L) + 100;
+        var expectedRs = SetOneHealthHideRsDto.builder().userId(userId).fullRecoveryTime(fullRecoveryTime).build();
+        when(repo.findById(any())).thenReturn(Optional.of(UserEntity.builder()
+                .id(userId)
+                .fullRecoveryTime(fullRecoveryTime)
+                .build()));
 
         // when
-        var actualRs = service.healthBack(rq.getUserId());
+        var actualRs = service.healthUp(rq.getUserId());
 
         // then
-        verify(repo, never()).findById(userId);
+        verify(repo).findById(userId);
+        verify(healthService).isMaxHealths(any());
+        verify(healthService).setHealths(any(), any());
+        verify(healthService).getHealths(any());
+        verify(repo).updateHealth(eq(userId), any());
+
         assertThat(actualRs)
                 .isInstanceOf(SetOneHealthHideRsDto.class)
                 .isEqualTo(expectedRs);
     }
 
     @Test
-    @Disabled
     void healthDown() {
         // given
         var userId = 123L;
-        var rq = HealthDownRqDto.builder().userId(userId).build();
-        var expectedRs = SetOneHealthHideRsDto.builder().userId(userId).build();
-        when(repo.findById(any())).thenReturn(Optional.of(UserEntity.builder().build()));
+        var rq = HealthBackRqDto.builder().userId(userId).build();
+        var fullRecoveryTime = (System.currentTimeMillis() / 1000L) + 100;
+        var expectedRs = SetOneHealthHideRsDto.builder().userId(userId).fullRecoveryTime(fullRecoveryTime).build();
+        when(repo.findById(any())).thenReturn(Optional.of(UserEntity.builder()
+                .id(userId)
+                .fullRecoveryTime(fullRecoveryTime)
+                .build()));
 
         // when
-        var actualRs = service.healthDown(rq.getUserId());
+        var actualRs = service.healthUp(rq.getUserId());
 
         // then
-        verify(repo, never()).findById(userId);
+        verify(repo).findById(userId);
+        verify(healthService).isMaxHealths(any());
+        verify(healthService).setHealths(any(), any());
+        verify(healthService).getHealths(any());
+        verify(repo).updateHealth(eq(userId), any());
+
         assertThat(actualRs)
                 .isInstanceOf(SetOneHealthHideRsDto.class)
                 .isEqualTo(expectedRs);

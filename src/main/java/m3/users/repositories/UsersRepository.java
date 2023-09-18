@@ -44,6 +44,7 @@ public interface UsersRepository extends CrudRepository<UserEntity, Long> {
 
     List<UserEntity> findAllByIdInOrderByNextPointIdDesc(List<Long> ids, Pageable pageable);
 
+    @Modifying
     @Query(value = "UPDATE users SET fullRecoveryTime = ?2 WHERE id = ?1", nativeQuery = true)
     void updateHealth(Long id, Long fullRecoveryTime);
 }

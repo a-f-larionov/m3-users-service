@@ -77,7 +77,7 @@ public class UsersRepositoryTest extends BaseDataJpaTest {
         jdbcTemplate.update("INSERT INTO users(socNetTypeId, socNetUserId, nextPointId) VALUES(?, ?, ?)", 1, 7, 1000);
 
         // when
-        List<Long> ids = usersRepository.gotMapFriends(10L, 100L, List.of(1L, 2L, 3L));
+        List<Long> ids = usersRepository.gotMapFriends(10L, 100L, List.of(3L, 4L, 5L, 6L, 2L));
 
         // then
         assertEquals(3, ids.size());
@@ -109,13 +109,13 @@ public class UsersRepositoryTest extends BaseDataJpaTest {
         var exitendsIds = new ArrayList<Long>();
 
         deleteAllUsers();
-        insertOneUser(1001, 5);
-        exitendsIds.add(insertOneUser(1002, 10));
-        insertOneUser(1003, 5);
-        exitendsIds.add(insertOneUser(1004, 30));
-        exitendsIds.add(insertOneUser(1005, 20));
-        insertOneUser(1006, 25);
-        exitendsIds.add(insertOneUser(1007, 50));
+        insertOneUserWithNextPointId(1001, 5);
+        exitendsIds.add(insertOneUserWithNextPointId(1002, 10));
+        insertOneUserWithNextPointId(1003, 5);
+        exitendsIds.add(insertOneUserWithNextPointId(1004, 30));
+        exitendsIds.add(insertOneUserWithNextPointId(1005, 20));
+        insertOneUserWithNextPointId(1006, 25);
+        exitendsIds.add(insertOneUserWithNextPointId(1007, 50));
 
         // when
         List<Long> result = usersRepository.findAllByIdInOrderByNextPointIdDesc(exitendsIds, Pageable.ofSize(3))
@@ -128,7 +128,27 @@ public class UsersRepositoryTest extends BaseDataJpaTest {
         );
     }
 
-    private Long insertOneUser(int socNetUserId, int nextPointId) {
+    @Test
+    void updateHealth() {
+        // given
+        // prepare db
+        deleteAllUsers();
+        var userId = insertOneUser(10001);
+        var fullRecoveryTime = 10001L;
+
+        // when
+        usersRepository.updateHealth(userId, fullRecoveryTime);
+
+        // then
+        var actualValue = jdbcTemplate.queryForMap("SELECT fullRecoveryTime FROM users WHERE id = ? ", userId).get("FULLRECOVERYTIME");
+        assertEquals(fullRecoveryTime, actualValue);
+    }
+
+    private Long insertOneUser(int socNetUserId) {
+        return insertOneUserWithNextPointId(socNetUserId, 1);
+    }
+
+    private Long insertOneUserWithNextPointId(int socNetUserId, int nextPointId) {
         jdbcTemplate.update("INSERT INTO users (socNetTypeId, socNetUserId, nextPointId) VALUES (1, ?, ? )", socNetUserId, nextPointId);
         return (Long) jdbcTemplate.queryForMap("SELECT MAX(id) as maxId FROM users").get("maxId");
     }
