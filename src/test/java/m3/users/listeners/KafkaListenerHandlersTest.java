@@ -1,22 +1,20 @@
 package m3.users.listeners;
 
+import m3.users.dto.rq.*;
+import m3.users.dto.rs.AuthSuccessRsDto;
+import m3.users.dto.rs.GotFriendsIdsRsDto;
+import m3.users.dto.rs.GotMapFriendIdsRsDto;
+import m3.users.dto.rs.UpdateUserListInfoRsDto;
+import m3.users.enums.SocNetType;
+import m3.users.services.impl.UserServiceImpl;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import m3.users.dto.rq.SendMeMapFriendsRqDto;
-import m3.users.enums.SocNetType;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import m3.users.dto.rq.AuthRqDto;
-import m3.users.dto.rq.SendMeUserListInfoRqDto;
-import m3.users.dto.rq.UpdateLastLogoutRqDto;
-import m3.users.dto.rs.AuthSuccessRsDto;
-import m3.users.dto.rs.UpdateUserListInfoRsDto;
-import m3.users.services.impl.UserServiceImpl;
 
 public class KafkaListenerHandlersTest {
 
@@ -44,20 +42,35 @@ public class KafkaListenerHandlersTest {
     @Test
     void sendMeUserListInfo() {
         // given
-        var rq = new SendMeUserListInfoRqDto();
+        var rq = new SendUserListInfoRqDto();
         var rs = new UpdateUserListInfoRsDto();
-        when(service.getUsers(any())).thenReturn(rs);
+        when(service.getUsers(any(), any())).thenReturn(rs);
 
         // when
-        var result = listener.sendMeUserListInfo(rq);
+        var result = listener.sendUserListInfo(rq);
 
         // then
-        verify(service).getUsers(eq(rq));
+        verify(service).getUsers(eq(rq.getUserId()), eq(rq.getIds()));
         assertThat(result).isInstanceOf(rs.getClass()).isEqualTo(rs);
     }
 
     @Test
-    void lastLogout() {
+    void sendMeMapFriends() {
+        // given
+        var rq = SendMapFriendsRqDto.builder().build();
+        var rs = GotMapFriendIdsRsDto.builder().build();
+        when(service.getMapFriends(any(), any(), any())).thenReturn(rs);
+
+        // when
+        GotMapFriendIdsRsDto result = listener.sendMapFriends(rq);
+
+        // then
+        verify(service).getMapFriends(eq(rq.getUserId()), eq(rq.getMapId()), eq(rq.getFids()));
+        assertThat(result).isInstanceOf(GotMapFriendIdsRsDto.class).isEqualTo(rs);
+    }
+
+    @Test
+    void updateLastLogout() {
         // given
         var rq = UpdateLastLogoutRqDto.builder().build();
 
@@ -65,19 +78,58 @@ public class KafkaListenerHandlersTest {
         listener.updateLastLogout(rq);
 
         // then
-        verify(service).updateLastLogout(eq(rq));
+        verify(service).updateLastLogout(eq(rq.getUserId()));
     }
 
     @Test
-    void sendMeMapFriends() {
+    void sendFriendIdsBySocNet() {
         // given
-        var rq = SendMeMapFriendsRqDto.builder().build();
+        var rq = SendFriendIdsBySocNetRqDto.builder().build();
+        var rs = GotFriendsIdsRsDto.builder().build();
+        when(service.getUserIdsFromSocNetIds(any(), any())).thenReturn(rs);
 
         // when
-        listener.sendMeMapFriends(rq);
+        var result = listener.sendFriendIdsBySocNet(rq);
 
         // then
-        verify(service).getMapFriends(eq(rq));
+        verify(service).getUserIdsFromSocNetIds(eq(rq.getUserId()), eq(rq.getFriendSocNetIds()));
+        assertThat(rs).isInstanceOf(GotFriendsIdsRsDto.class).isEqualTo(result);
+    }
+
+    @Test
+    void sendTopUsers() {
+        // given
+        var rq = SendTopUsersRqDto.builder().build();
+
+        // when
+        listener.sendTopUsers(rq);
+
+        // then
+        verify(service).getTopUsersRsDto(eq(rq.getUserId()), eq(rq.getIds()));
+    }
+
+    @Test
+    void healthBack() {
+        // given
+        var rq = HealthBackRqDto.builder().build();
+
+        // when
+        listener.healthBack(rq);
+
+        // then
+        verify(service).healthBack(eq(rq.getUserId()));
+    }
+
+    @Test
+    void healthDown() {
+        // given
+        var rq = HealthDownRqDto.builder().build();
+
+        // when
+        listener.healthDown(rq);
+
+        // then
+        verify(service).healthDown(eq(rq.getUserId()));
     }
 
     private AuthSuccessRsDto createAuthSuccessRsDto() {

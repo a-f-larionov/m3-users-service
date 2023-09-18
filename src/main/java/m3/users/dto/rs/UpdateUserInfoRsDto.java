@@ -1,12 +1,16 @@
 package m3.users.dto.rs;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Data
-@Builder
+@ToString
+@EqualsAndHashCode
+@Getter
+@Setter
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UpdateUserInfoRsDto {
-
     private long id;
     private long nextPointId;
     private long socNetUserId;

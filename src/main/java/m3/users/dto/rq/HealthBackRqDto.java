@@ -5,11 +5,10 @@ import lombok.experimental.SuperBuilder;
 import m3.users.dto.rs.UserIdRsDto;
 
 @SuperBuilder
+@NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@NoArgsConstructor
-public class UpdateLastLogoutRqDto extends UserIdRsDto {
-
+public class HealthBackRqDto extends UserIdRsDto {
 }

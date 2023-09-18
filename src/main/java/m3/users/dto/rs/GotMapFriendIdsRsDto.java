@@ -1,18 +1,18 @@
 package m3.users.dto.rs;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
-@Data
-@Builder
+@Getter
+@Setter
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class GotMapFriendIdsRsDto {
-    private Long toUserId;
+public class GotMapFriendIdsRsDto extends UserIdRsDto{
     private Long mapId;
     private List<Long> ids;
 }

@@ -4,18 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import m3.users.commons.HttpExceptionError;
 import m3.users.dto.rq.AuthRqDto;
-import m3.users.dto.rq.SendMeMapFriendsRqDto;
-import m3.users.dto.rq.SendMeUserListInfoRqDto;
-import m3.users.dto.rq.UpdateLastLogoutRqDto;
-import m3.users.dto.rs.AuthSuccessRsDto;
-import m3.users.dto.rs.GotMapFriendIdsRsDto;
-import m3.users.dto.rs.UpdateUserListInfoRsDto;
+import m3.users.dto.rs.*;
 import m3.users.entities.UserEntity;
+import m3.users.enums.SocNetType;
 import m3.users.mappers.UsersMapper;
 import m3.users.repositories.UsersRepository;
+import m3.users.services.HealthService;
 import m3.users.services.SocNetService;
 import m3.users.services.UserService;
+import m3.users.settings.CommonSettings;
 import m3.users.settings.MapSettings;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +34,7 @@ public class UserServiceImpl implements UserService {
     private final UsersRepository usersRepository;
     private final UsersMapper mapper;
     private final SocNetService socNet;
+    private final HealthService healthService;
     //private final LogService logg;
 
     public AuthSuccessRsDto auth(AuthRqDto authRqDto) {
@@ -46,19 +46,19 @@ public class UserServiceImpl implements UserService {
         }
         UserEntity outUser;
 
-        Optional<UserEntity> existendUser = usersRepository
+        Optional<UserEntity> existentUser = usersRepository
                 .findBySocNetTypeIdAndSocNetUserId(authRqDto.getSocNetType().getId(), authRqDto.getSocNetUserId());
 
-        if (existendUser.isEmpty()) {
+        if (existentUser.isEmpty()) {
             var currentMills = System.currentTimeMillis();
-            var entitiy = mapper.forAuthNewUser(
+            var entity = mapper.forAuthNewUser(
                     authRqDto,
                     currentMills / 1000,
                     DEFAULT_NEXT_POINT_ID
             );
-            outUser = usersRepository.save(entitiy);
+            outUser = usersRepository.save(entity);
         } else {
-            outUser = existendUser.orElseThrow();
+            outUser = existentUser.orElseThrow();
             var newLoginTime = System.currentTimeMillis() / 1000;
             updateLogin(outUser.getId(), newLoginTime);
             outUser.setLoginTm(newLoginTime);
@@ -78,39 +78,132 @@ public class UserServiceImpl implements UserService {
         usersRepository.updateLogin(id, newLoginTime);
     }
 
+    public UpdateUserListInfoRsDto getUsers(Long userId, List<Long> ids) {
 
-    public UpdateUserListInfoRsDto getUsers(SendMeUserListInfoRqDto rq) {
-
-        List<UserEntity> usersList = usersRepository.findAllByIdIn(rq.getIds());
+        List<UserEntity> usersList = usersRepository.findAllByIdIn(ids);
 
         var list = usersList.stream()
                 .map(mapper::entityToDto)
                 .toList();
 
         return UpdateUserListInfoRsDto.builder()
-                .toUserId(rq.getToUserId())
+                .userId(userId)
                 .list(list)
                 .build();
     }
 
-    public void updateLastLogout(UpdateLastLogoutRqDto rq) {
+    public void updateLastLogout(Long userId) {
         //@todo moeve mills/1000 to one method
-        usersRepository.updateLastLogout(rq.getUserId(), System.currentTimeMillis() / 1000);
+        usersRepository.updateLastLogout(userId, System.currentTimeMillis() / 1000);
     }
 
     @Override
-    public GotMapFriendIdsRsDto getMapFriends(SendMeMapFriendsRqDto sendMeMapFriendsRqDto) {
+    public GotMapFriendIdsRsDto getMapFriends(Long userId, Long mapId, List<Long> fids) {
 
         var ids = usersRepository.gotMapFriends(
-                MapSettings.getFirstPointId(sendMeMapFriendsRqDto.mapId),
-                MapSettings.getLastPointId(sendMeMapFriendsRqDto.mapId),
-                sendMeMapFriendsRqDto.fids
+                MapSettings.getFirstPointId(mapId),
+                MapSettings.getLastPointId(mapId),
+                fids
         );
 
         return GotMapFriendIdsRsDto.builder()
-                .toUserId(sendMeMapFriendsRqDto.toUserId)
-                .mapId(sendMeMapFriendsRqDto.mapId)
+                .userId(userId)
+                .mapId(mapId)
                 .ids(ids)
                 .build();
+    }
+
+    @Override
+    public GotFriendsIdsRsDto getUserIdsFromSocNetIds(Long userId, List<Long> friendSocNetIds) {
+
+        List<Long> friendIds = null;
+
+        Optional<UserEntity> optionalUser = usersRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            UserEntity user = optionalUser.get();
+            if (user.getSocNetTypeId().equals(SocNetType.Standalone.getId())) {
+                friendIds = usersRepository.findAll().stream().map(UserEntity::getId).toList();
+            } else {
+                friendIds = usersRepository.findIdBySocNetTypeIdAndSocNetUserIdIn(user.getSocNetTypeId(), friendSocNetIds);
+            }
+        }
+
+        return GotFriendsIdsRsDto.builder()
+                .userId(userId)
+                .fids(friendIds)
+                .build();
+    }
+
+    public GotTopUsersRsDto getTopUsersRsDto(Long userId, List<Long> ids) {
+
+        var users = usersRepository.findAllByIdInOrderByNextPointIdDesc(ids, Pageable.ofSize(CommonSettings.TOP_USERS_LIMIT))
+                .stream().map(mapper::entityToDto)
+                .toList();
+
+        return GotTopUsersRsDto.builder()
+                .userId(userId)
+                .users(users)
+                .build();
+    }
+
+    @Override
+    public synchronized SetOneHealthHideRsDto healthBack(Long userId) {
+
+        Optional<UserEntity> optionalUser = usersRepository.findById(userId);
+
+        if (optionalUser.isPresent()) {
+            var user = optionalUser.get();
+            if (healthService.isMaxHealths(user)) {
+                healthService.changeHealths(user, -1);
+                usersRepository.updateHealth(user.getId(), user.getFullRecoveryTime());
+            }
+            return SetOneHealthHideRsDto.builder()
+                    .userId(userId)
+                    .fullRecoveryTime(user.getFullRecoveryTime())
+                    .build();
+        }
+        return null;
+    }
+
+    @Override
+    public SetOneHealthHideRsDto healthDown(Long userId) {
+
+        // lock!
+
+        //https://www.baeldung.com/java-acquire-lock-by-key
+//        // locking
+//        Optional<UserEntity> byId = usersRepository.findById(rq.getUserId());
+//
+//        var user = byId.get();
+//
+//        healthService.isMaxHealths(user);
+//        healthService.changeHealths(user, -1);
+//        usersRepository.updateHealthAndStartTime(user.getId(), user.getFullRecoveryTime());
+
+
+//        LOCK.acquire(Keys.health(cntx.user.id), function (done) {
+//            //@todo auto LOCK timeout(with keys!)
+//            setTimeout(done, 5 * 60 * 1000);
+//            DataUser.getById(cntx.user.id, function (user) {
+//                if (LogicHealth.getHealths(user) > 0) {
+//                    LogicHealth.decrementHealth(user, 1);
+//                    DataUser.updateHealthAndStartTime(user, function () {
+//                        CAPIUser.setOneHealthHide(cntx.user.id, true, user.fullRecoveryTime);
+//                    }
+//                    );
+//                    done();
+//                } else {
+//                    done();
+//                }
+//            })
+//        });
+        return SetOneHealthHideRsDto.builder()
+                .userId(userId)
+                .build();
+    }
+
+    @Override
+    public SetOneHealthHideRsDto zeroLife(Long userId) {
+        return null;
     }
 }

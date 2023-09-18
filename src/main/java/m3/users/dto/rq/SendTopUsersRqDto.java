@@ -1,7 +1,8 @@
-package m3.users.dto.rs;
+package m3.users.dto.rq;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import m3.users.dto.rs.UserIdRsDto;
 
 import java.util.List;
 
@@ -10,8 +11,8 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@NoArgsConstructor
 @AllArgsConstructor
-public class UpdateUserListInfoRsDto extends UserIdRsDto {
-    private List<UpdateUserInfoRsDto> list;
+@NoArgsConstructor
+public class SendTopUsersRqDto extends UserIdRsDto {
+    private List<Long> ids;
 }

@@ -1,20 +1,27 @@
 package m3.users.services;
 
 import m3.users.dto.rq.AuthRqDto;
-import m3.users.dto.rq.SendMeMapFriendsRqDto;
-import m3.users.dto.rq.SendMeUserListInfoRqDto;
-import m3.users.dto.rq.UpdateLastLogoutRqDto;
-import m3.users.dto.rs.AuthSuccessRsDto;
-import m3.users.dto.rs.GotMapFriendIdsRsDto;
-import m3.users.dto.rs.UpdateUserListInfoRsDto;
+import m3.users.dto.rs.*;
+
+import java.util.List;
 
 public interface UserService {
 
     AuthSuccessRsDto auth(AuthRqDto authRqDto);
 
-    UpdateUserListInfoRsDto getUsers(SendMeUserListInfoRqDto rq);
+    UpdateUserListInfoRsDto getUsers(Long userId, List<Long> ids);
 
-    void updateLastLogout(UpdateLastLogoutRqDto rq);
+    void updateLastLogout(Long userId);
 
-    GotMapFriendIdsRsDto getMapFriends(SendMeMapFriendsRqDto sendMeMapFriendsRqDto);
+    GotMapFriendIdsRsDto getMapFriends(Long userId, Long mapId, List<Long> fids);
+
+    GotFriendsIdsRsDto getUserIdsFromSocNetIds(Long userId, List<Long> friendSocNetIds);
+
+    GotTopUsersRsDto getTopUsersRsDto(Long userId, List<Long> ids);
+
+    SetOneHealthHideRsDto healthBack(Long userId);
+
+    SetOneHealthHideRsDto healthDown(Long userId);
+
+    SetOneHealthHideRsDto zeroLife(Long userId);
 }

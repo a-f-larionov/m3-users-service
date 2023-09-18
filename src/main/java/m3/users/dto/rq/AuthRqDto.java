@@ -7,6 +7,7 @@ import m3.users.enums.SocNetType;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthRqDto {

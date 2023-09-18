@@ -12,6 +12,6 @@ import java.util.List;
 @ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateUserListInfoRsDto extends UserIdRsDto {
-    private List<UpdateUserInfoRsDto> list;
+public class GotFriendsIdsRsDto extends UserIdRsDto {
+    public List<Long> fids;
 }

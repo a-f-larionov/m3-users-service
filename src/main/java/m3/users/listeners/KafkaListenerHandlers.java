@@ -1,13 +1,8 @@
 package m3.users.listeners;
 
 import lombok.AllArgsConstructor;
-import m3.users.dto.rq.AuthRqDto;
-import m3.users.dto.rq.SendMeMapFriendsRqDto;
-import m3.users.dto.rq.SendMeUserListInfoRqDto;
-import m3.users.dto.rq.UpdateLastLogoutRqDto;
-import m3.users.dto.rs.AuthSuccessRsDto;
-import m3.users.dto.rs.GotMapFriendIdsRsDto;
-import m3.users.dto.rs.UpdateUserListInfoRsDto;
+import m3.users.dto.rq.*;
+import m3.users.dto.rs.*;
 import m3.users.services.impl.UserServiceImpl;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -29,18 +24,48 @@ public class KafkaListenerHandlers {
 
     @KafkaHandler
     @SendTo("t-node")
-    public UpdateUserListInfoRsDto sendMeUserListInfo(SendMeUserListInfoRqDto sendMeUserListInfoDto) {
-        return service.getUsers(sendMeUserListInfoDto);
+    public UpdateUserListInfoRsDto sendUserListInfo(SendUserListInfoRqDto rq) {
+        return service.getUsers(rq.getUserId(), rq.getIds());
     }
 
     @KafkaHandler
     @SendTo("t-node")
-    public GotMapFriendIdsRsDto sendMeMapFriends(SendMeMapFriendsRqDto sendMeMapFriendsRqDto){
-       return service.getMapFriends(sendMeMapFriendsRqDto);
+    public GotMapFriendIdsRsDto sendMapFriends(SendMapFriendsRqDto rq) {
+        return service.getMapFriends(rq.getUserId(), rq.getMapId(), rq.getFids());
     }
 
     @KafkaHandler
     public void updateLastLogout(UpdateLastLogoutRqDto dto) {
-        service.updateLastLogout(dto);
+        service.updateLastLogout(dto.getUserId());
+    }
+
+    @KafkaHandler
+    @SendTo("t-node")
+    public GotFriendsIdsRsDto sendFriendIdsBySocNet(SendFriendIdsBySocNetRqDto rq) {
+        return service.getUserIdsFromSocNetIds(rq.getUserId(), rq.getFriendSocNetIds());
+    }
+
+    @KafkaHandler
+    @SendTo("t-node")
+    public GotTopUsersRsDto sendTopUsers(SendTopUsersRqDto rq) {
+        return service.getTopUsersRsDto(rq.getUserId(), rq.getIds());
+    }
+
+    @KafkaHandler
+    @SendTo("t-node")
+    public SetOneHealthHideRsDto healthBack(HealthBackRqDto rq) {
+        return service.healthBack(rq.getUserId());
+    }
+
+    @KafkaHandler
+    @SendTo("t-node")
+    public SetOneHealthHideRsDto healthDown(HealthDownRqDto rq) {
+        return service.healthDown(rq.getUserId());
+    }
+
+    @KafkaHandler
+    @SendTo("t-node")
+    public SetOneHealthHideRsDto zeroLife(ZeroLifeRqDto rq){
+        return service.zeroLife(rq.getUserId());
     }
 }

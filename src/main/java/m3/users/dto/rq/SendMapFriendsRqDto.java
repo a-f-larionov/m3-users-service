@@ -1,7 +1,8 @@
-package m3.users.dto.rs;
+package m3.users.dto.rq;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import m3.users.dto.rs.UserIdRsDto;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ import java.util.List;
 @ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateUserListInfoRsDto extends UserIdRsDto {
-    private List<UpdateUserInfoRsDto> list;
+public class SendMapFriendsRqDto extends UserIdRsDto {
+
+    private Long mapId;
+    private List<Long> fids;
 }

@@ -3,8 +3,6 @@ package m3.users.dto.rs;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.List;
-
 @SuperBuilder
 @Getter
 @Setter
@@ -12,6 +10,6 @@ import java.util.List;
 @ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateUserListInfoRsDto extends UserIdRsDto {
-    private List<UpdateUserInfoRsDto> list;
+public class SetOneHealthHideRsDto extends UserIdRsDto {
+    public Long fullRecoveryTime;
 }
