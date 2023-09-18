@@ -105,7 +105,7 @@ public class KafkaListenerHandlersTest {
         listener.sendTopUsers(rq);
 
         // then
-        verify(service).getTopUsersRsDto(eq(rq.getUserId()), eq(rq.getIds()));
+        verify(service).getTopUsersRsDto(eq(rq.getUserId()), eq(rq.getFids()));
     }
 
     @Test

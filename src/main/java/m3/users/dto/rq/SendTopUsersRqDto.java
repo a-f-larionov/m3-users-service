@@ -14,5 +14,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SendTopUsersRqDto extends UserIdRsDto {
-    private List<Long> ids;
+    private List<Long> fids;
 }

@@ -22,7 +22,7 @@ public class HealthServiceImpl implements HealthService {
     @Override
     public void setHealths(UserEntity user, Long value) {
         user.setFullRecoveryTime(getTime() -
-                value * CommonSettings.HEALTH_RECOVERY_TIME +
+                (CommonSettings.HEALTH_RECOVERY_TIME * value) +
                 (CommonSettings.HEALTH_MAX * CommonSettings.HEALTH_RECOVERY_TIME));
     }
 
@@ -39,6 +39,9 @@ public class HealthServiceImpl implements HealthService {
     }
 
     private long getTime() {
-        return System.currentTimeMillis() / 1000L;
+        /**
+         * -1 секунда делает так, что сердце не дергается на клиенте, это костыль да
+         */
+        return (long) Math.floor(System.currentTimeMillis() / 1000D) -1;
     }
 }

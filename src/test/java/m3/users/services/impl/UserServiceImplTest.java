@@ -231,16 +231,16 @@ public class UserServiceImplTest {
 
         long expectedUserId = 1L;
         List<UpdateUserInfoRsDto> usersList = List.of(UpdateUserInfoRsDto.builder().id(expectedUserId).build());
-        var rq = SendTopUsersRqDto.builder().userId(userId).ids(List.of(expectedUserId)).build();
+        var rq = SendTopUsersRqDto.builder().userId(userId).fids(List.of(expectedUserId)).build();
         var expectedRs = GotTopUsersRsDto.builder().userId(userId).users(usersList).build();
         when(repo.findAllByIdInOrderByNextPointIdDesc(any(), any())).thenReturn(List.of(UserEntity.builder().id(expectedUserId).build()));
         when(mapper.entityToDto(any())).thenReturn(UpdateUserInfoRsDto.builder().id(expectedUserId).build());
 
         // when
-        var actualRs = service.getTopUsersRsDto(rq.getUserId(), rq.getIds());
+        var actualRs = service.getTopUsersRsDto(rq.getUserId(), rq.getFids());
 
         // then
-        verify(repo).findAllByIdInOrderByNextPointIdDesc(eq(rq.getIds()), eq(Pageable.ofSize(CommonSettings.TOP_USERS_LIMIT)));
+        verify(repo).findAllByIdInOrderByNextPointIdDesc(eq(rq.getFids()), eq(Pageable.ofSize(CommonSettings.TOP_USERS_LIMIT)));
         assertThat(actualRs)
                 .isInstanceOf(GotTopUsersRsDto.class)
                 .isEqualTo(expectedRs);
@@ -252,7 +252,11 @@ public class UserServiceImplTest {
         var userId = 123L;
         var rq = HealthBackRqDto.builder().userId(userId).build();
         var fullRecoveryTime = (System.currentTimeMillis() / 1000L) + 100;
-        var expectedRs = SetOneHealthHideRsDto.builder().userId(userId).fullRecoveryTime(fullRecoveryTime).build();
+        var expectedRs = SetOneHealthHideRsDto.builder()
+                .userId(userId)
+                .fullRecoveryTime(fullRecoveryTime)
+                .oneHealthHide(false)
+                .build();
         when(repo.findById(any())).thenReturn(Optional.of(UserEntity.builder()
                 .id(userId)
                 .fullRecoveryTime(fullRecoveryTime)
@@ -279,18 +283,21 @@ public class UserServiceImplTest {
         var userId = 123L;
         var rq = HealthBackRqDto.builder().userId(userId).build();
         var fullRecoveryTime = (System.currentTimeMillis() / 1000L) + 100;
-        var expectedRs = SetOneHealthHideRsDto.builder().userId(userId).fullRecoveryTime(fullRecoveryTime).build();
+        var expectedRs = SetOneHealthHideRsDto.builder()
+                .userId(userId)
+                .fullRecoveryTime(fullRecoveryTime)
+                .oneHealthHide(true)
+                .build();
         when(repo.findById(any())).thenReturn(Optional.of(UserEntity.builder()
                 .id(userId)
                 .fullRecoveryTime(fullRecoveryTime)
                 .build()));
 
         // when
-        var actualRs = service.healthUp(rq.getUserId());
+        var actualRs = service.healthDown(rq.getUserId());
 
         // then
         verify(repo).findById(userId);
-        verify(healthService).isMaxHealths(any());
         verify(healthService).setHealths(any(), any());
         verify(healthService).getHealths(any());
         verify(repo).updateHealth(eq(userId), any());

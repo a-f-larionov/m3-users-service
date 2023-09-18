@@ -172,8 +172,14 @@ public class UserServiceImpl implements UserService {
 
         Optional<UserEntity> optionalUser = usersRepository.findById(userId);
 
-        if (optionalUser.isPresent()) {
+        System.out.println(System.currentTimeMillis() / 1000L);
+
+         if (optionalUser.isPresent()) {
             var user = optionalUser.get();
+             System.out.println(healthService.getHealths(user));
+             System.out.println(healthService.getHealths(user).equals(0L));
+             System.out.println(healthService.getHealths(user)-1);
+
             if (!healthService.getHealths(user).equals(0L)) {
                 healthService.setHealths(user,
                         healthService.getHealths(user) - 1);

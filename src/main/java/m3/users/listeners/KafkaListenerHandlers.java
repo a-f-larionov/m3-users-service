@@ -48,7 +48,7 @@ public class KafkaListenerHandlers {
     @KafkaHandler
     @SendTo("t-node")
     public GotTopUsersRsDto sendTopUsers(SendTopUsersRqDto rq) {
-        return service.getTopUsersRsDto(rq.getUserId(), rq.getIds());
+        return service.getTopUsersRsDto(rq.getUserId(), rq.getFids());
     }
 
     @KafkaHandler
