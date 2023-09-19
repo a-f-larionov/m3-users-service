@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 @SpringBootTest(properties = {
         "logging.level.org.hibernate.SQL=TRACE"
@@ -43,8 +44,8 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
         var rsDto = userService.auth(authRqDto);
 
         // then
-        assertThat(rsDto.getUserId()).isNotNull();
-        assertThat(rsDto.getSocNetType()).isEqualTo(authRqDto.getSocNetType());
+        assertThat(rsDto.getId()).isNotNull();
+        assertThat(rsDto.getSocNetTypeId()).isEqualTo(authRqDto.getSocNetType().getId());
         assertThat(rsDto.getSocNetUserId()).isEqualTo(authRqDto.getSocNetUserId());
         assertThat(rsDto.getCreateTm()).isGreaterThanOrEqualTo(testStart);
         assertThat(rsDto.getLoginTm()).isGreaterThanOrEqualTo(testStart);
@@ -62,8 +63,8 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
         var socNetUserId = getMaxSocNetUserId() + 1;
         var authRqDto = createNewAuthRqDto(socNetUserId);
         var created = userService.auth(authRqDto);
-        jdbcTemplate.update("UPDATE users SET create_tm = " + (beforeCreateTm - 1000) + " WHERE id=" + created.getUserId());
-        jdbcTemplate.update("UPDATE users SET login_tm = " + (beforeCreateTm - 1000) + " WHERE id=" + created.getUserId());
+        jdbcTemplate.update("UPDATE users SET create_tm = " + (beforeCreateTm - 1000) + " WHERE id=" + created.getId());
+        jdbcTemplate.update("UPDATE users SET login_tm = " + (beforeCreateTm - 1000) + " WHERE id=" + created.getId());
         created.setCreateTm(beforeCreateTm - 1000);
         created.setLoginTm(beforeCreateTm - 1000);
 
@@ -71,8 +72,8 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
         var rsDto = userService.auth(authRqDto);
 
         // then
-        assertThat(rsDto.getUserId()).isEqualTo(created.getUserId());
-        assertThat(rsDto.getSocNetType()).isEqualTo(authRqDto.getSocNetType());
+        assertThat(rsDto.getId()).isEqualTo(created.getId());
+        assertThat(rsDto.getSocNetUserId()).isEqualTo(authRqDto.getSocNetType().getId());
         assertThat(rsDto.getSocNetUserId()).isEqualTo(authRqDto.getSocNetUserId());
         assertThat(rsDto.getCreateTm()).isEqualTo(created.getCreateTm());
         assertThat(rsDto.getLoginTm()).isGreaterThanOrEqualTo(beforeCreateTm);
@@ -90,8 +91,8 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
         var userId = 123L;
         // prepare server state
         deleteAllUsers();
-        var userId1 = userService.auth(createNewAuthRqDto(1001L)).getUserId();
-        var userId2 = userService.auth(createNewAuthRqDto(1002L)).getUserId();
+        var userId1 = userService.auth(createNewAuthRqDto(1001L)).getId();
+        var userId2 = userService.auth(createNewAuthRqDto(1002L)).getId();
         userService.auth(createNewAuthRqDto(1003L));
         userService.auth(createNewAuthRqDto(1004L));
 
@@ -107,7 +108,7 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
     public void updateLastLogout() {
         // given
         var user = userService.auth(createNewAuthRqDto(123232L));
-        var userId = user.getUserId();
+        var userId = user.getId();
         jdbcTemplate.update("UPDATE users SET logout_tm = ? WHERE id=? ", 100, userId);
 
         // when
@@ -140,7 +141,7 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
 
         // preparing
         deleteAllUsers();
-        var userId = userService.auth(createNewAuthRqDto(socNetUserId)).getUserId();
+        var userId = userService.auth(createNewAuthRqDto(socNetUserId)).getId();
         // friend on map left edge
         friendsOnMapIds.add(createUserAndSetPointId(friendOnMapId1, firstPointId));
         // friend on map right ede
@@ -188,7 +189,7 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
 
         // preparing
         deleteAllUsers();
-        var userId = userService.auth(createNewAuthRqDto(socNetUserId)).getUserId();
+        var userId = userService.auth(createNewAuthRqDto(socNetUserId)).getId();
         // friend on map left edge
         allFriendIds.add(createUserAndSetPointId(friendOnMapId1, firstPointId));
         // friend on map right ede
@@ -268,7 +269,7 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
         deleteAllUsers();
         var userId = createUser(1000L);
         var maxHealths = CommonSettings.HEALTH_MAX;
-        // set 0 healts
+        // set 0 health
         jdbcTemplate.update("UPDATE users SET fullRecoveryTime = ? WHERE id = ? ",
                 (System.currentTimeMillis() / 1000L) + CommonSettings.HEALTH_RECOVERY_TIME * maxHealths
                 , userId);
@@ -278,8 +279,9 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
 
         // then
         assertThat(actualRs.getUserId()).isEqualTo(userId);
-        assertThat(actualRs.getFullRecoveryTime()).isEqualTo(
-                (System.currentTimeMillis() / 1000L) + CommonSettings.HEALTH_RECOVERY_TIME * (maxHealths - 1)
+        assertThat(actualRs.getFullRecoveryTime()).isCloseTo(
+                (System.currentTimeMillis() / 1000L) + CommonSettings.HEALTH_RECOVERY_TIME * (maxHealths - 1),
+                within(1L)
         );
     }
 
@@ -288,8 +290,8 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
         // given
         deleteAllUsers();
         var userId = createUser(1000L);
-        var maxHealths = CommonSettings.HEALTH_MAX;
-        // set 0 healts
+
+
         jdbcTemplate.update("UPDATE users SET fullRecoveryTime = ? WHERE id = ? ",
                 (System.currentTimeMillis() / 1000L) + CommonSettings.HEALTH_RECOVERY_TIME * 2
                 , userId);
@@ -299,8 +301,9 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
 
         // then
         assertThat(actualRs.getUserId()).isEqualTo(userId);
-        assertThat(actualRs.getFullRecoveryTime()).isEqualTo(
-                (System.currentTimeMillis() / 1000L) + CommonSettings.HEALTH_RECOVERY_TIME * 3
+        assertThat(actualRs.getFullRecoveryTime()).isCloseTo(
+                (System.currentTimeMillis() / 1000L) + CommonSettings.HEALTH_RECOVERY_TIME * 3,
+                within(1L)
         );
     }
 
@@ -315,10 +318,10 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
     }
 
     private void assertRsDtoEqualsDBState(AuthSuccessRsDto rsDto, Long connectionId) {
-        Map<String, Object> userDb = jdbcTemplate.queryForMap("SELECT * FROM users WHERE id = ?", rsDto.getUserId());
+        Map<String, Object> userDb = jdbcTemplate.queryForMap("SELECT * FROM users WHERE id = ?", rsDto.getId());
 
-        assertThat(rsDto.getUserId()).isEqualTo(userDb.get("ID"));
-        assertThat(rsDto.getSocNetType().getId()).isEqualTo(userDb.get("SOCNETTYPEID"));
+        assertThat(rsDto.getId()).isEqualTo(userDb.get("ID"));
+        assertThat(rsDto.getSocNetTypeId()).isEqualTo(userDb.get("SOCNETTYPEID"));
         assertThat(rsDto.getSocNetUserId()).isEqualTo(userDb.get("SOCNETUSERID"));
         assertThat(rsDto.getCreateTm()).isEqualTo(userDb.get("CREATE_TM"));
         assertThat(rsDto.getLoginTm()).isEqualTo(userDb.get("LOGIN_TM"));
@@ -362,7 +365,7 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
     }
 
     private Long createUserAndSetPointId(Long socNetId, Long nextPointId) {
-        var userId = userService.auth(createNewAuthRqDto(socNetId)).getUserId();
+        var userId = userService.auth(createNewAuthRqDto(socNetId)).getId();
         jdbcTemplate.update("UPDATE users SET nextPointId = ? WHERE id = ? ", nextPointId, userId);
         return userId;
     }

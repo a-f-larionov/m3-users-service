@@ -134,9 +134,9 @@ public class KafkaListenerHandlersTest {
 
     private AuthSuccessRsDto createAuthSuccessRsDto() {
         return AuthSuccessRsDto.builder()
-                .userId(1L)
+                .id(1L)
                 .nextPointId(10L)
-                .socNetType(SocNetType.VK)
+                .socNetTypeId(SocNetType.VK.getId())
                 .socNetUserId(34343343L)
                 .createTm(123L)
                 .loginTm(345L)

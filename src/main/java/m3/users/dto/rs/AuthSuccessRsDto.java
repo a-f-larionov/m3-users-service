@@ -1,21 +1,21 @@
 package m3.users.dto.rs;
 
 import lombok.*;
-import m3.users.enums.SocNetType;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+@SuperBuilder
 @Getter
 @Setter
 @ToString(callSuper = true)
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthSuccessRsDto {
+public class AuthSuccessRsDto extends UserIdRsDto{
 
     private Long connectionId;
 
-    private Long userId;
-    private SocNetType socNetType;
+    private Long id;
+    private Long socNetTypeId;
     private Long socNetUserId;
 
     private Long nextPointId;

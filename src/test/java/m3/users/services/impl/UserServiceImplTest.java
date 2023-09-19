@@ -292,6 +292,7 @@ public class UserServiceImplTest {
                 .id(userId)
                 .fullRecoveryTime(fullRecoveryTime)
                 .build()));
+        when(healthService.getHealths(any())).thenReturn(3L);
 
         // when
         var actualRs = service.healthDown(rq.getUserId());
@@ -299,7 +300,7 @@ public class UserServiceImplTest {
         // then
         verify(repo).findById(userId);
         verify(healthService).setHealths(any(), any());
-        verify(healthService).getHealths(any());
+        verify(healthService, times(2)).getHealths(any());
         verify(repo).updateHealth(eq(userId), any());
 
         assertThat(actualRs)

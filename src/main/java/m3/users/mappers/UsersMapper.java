@@ -11,10 +11,11 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface UsersMapper {
 
+    @Mapping(target = "userId", source = "id")
     UpdateUserInfoRsDto entityToDto(UserEntity user);
 
     @Mapping(target = "userId", source = "entity.id")
-    @Mapping(target = "socNetType", source = "entity.socNetTypeId")
+    @Mapping(target = "socNetTypeId", source = "entity.socNetTypeId")
     AuthSuccessRsDto entityToAuthSuccessRsDto(UserEntity entity, Long connectionId);
 
     default SocNetType map(Long value) {

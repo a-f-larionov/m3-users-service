@@ -172,13 +172,9 @@ public class UserServiceImpl implements UserService {
 
         Optional<UserEntity> optionalUser = usersRepository.findById(userId);
 
-        System.out.println(System.currentTimeMillis() / 1000L);
-
          if (optionalUser.isPresent()) {
             var user = optionalUser.get();
-             System.out.println(healthService.getHealths(user));
-             System.out.println(healthService.getHealths(user).equals(0L));
-             System.out.println(healthService.getHealths(user)-1);
+
 
             if (!healthService.getHealths(user).equals(0L)) {
                 healthService.setHealths(user,
@@ -196,7 +192,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UpdateUserInfoRsDto zeroLife(Long userId) {
-
 
         Optional<UserEntity> optionalUser = usersRepository.findById(userId);
 

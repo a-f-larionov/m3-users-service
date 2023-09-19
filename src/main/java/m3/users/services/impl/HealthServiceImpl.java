@@ -39,9 +39,9 @@ public class HealthServiceImpl implements HealthService {
     }
 
     private long getTime() {
-        /**
+        /*
          * -1 секунда делает так, что сердце не дергается на клиенте, это костыль да
          */
-        return (long) Math.floor(System.currentTimeMillis() / 1000D) -1;
+        return (long) Math.floor(System.currentTimeMillis() / 1000D) ;
     }
 }

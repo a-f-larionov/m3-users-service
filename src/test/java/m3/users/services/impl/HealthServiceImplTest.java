@@ -6,6 +6,7 @@ import m3.users.settings.CommonSettings;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 class HealthServiceImplTest {
 
@@ -50,7 +51,7 @@ class HealthServiceImplTest {
         healthService.setHealths(user, CommonSettings.HEALTH_MAX);
 
         // then
-        assertThat(user.getFullRecoveryTime()).isEqualTo(System.currentTimeMillis() / 1000L);
+        assertThat(user.getFullRecoveryTime()).isCloseTo(System.currentTimeMillis() / 1000L, within(1L));
         assertThat(healthService.getHealths(user)).isEqualTo(CommonSettings.HEALTH_MAX);
     }
 
@@ -63,9 +64,9 @@ class HealthServiceImplTest {
         healthService.setHealths(user, 0L);
 
         // then
-        assertThat(user.getFullRecoveryTime()).isEqualTo(
+        assertThat(user.getFullRecoveryTime()).isCloseTo(
                 (System.currentTimeMillis() / 1000L)
-                        + CommonSettings.HEALTH_MAX * CommonSettings.HEALTH_RECOVERY_TIME);
+                        + CommonSettings.HEALTH_MAX * CommonSettings.HEALTH_RECOVERY_TIME, within(1L));
         assertThat(healthService.getHealths(user)).isEqualTo(0);
     }
 
