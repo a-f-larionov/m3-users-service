@@ -26,11 +26,11 @@ public class AdminConfig {
 
     @Bean
     public NewTopic users() {
-        return new NewTopic("t-users", 1, (short) 1);
+        return new NewTopic("topic-users", 1, (short) 1);
     }
 
     @Bean
     public NewTopic node() {
-        return new NewTopic("t-node", 1, (short) 1);
+        return new NewTopic("topic-node", 1, (short) 1);
     }
 }

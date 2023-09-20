@@ -11,25 +11,25 @@ import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 @Component
-@KafkaListener(topics = "t-users", groupId = "2")
+@KafkaListener(topics = "topic-users", groupId = "2")
 public class KafkaListenerHandlers {
 
     private final UserServiceImpl service;
 
     @KafkaHandler
-    @SendTo("t-node")
+    @SendTo("topic-client")
     public AuthSuccessRsDto auth(AuthRqDto authRqDto) {
         return service.auth(authRqDto);
     }
 
     @KafkaHandler
-    @SendTo("t-node")
+    @SendTo("topic-client")
     public UpdateUserListInfoRsDto sendUserListInfo(SendUserListInfoRqDto rq) {
         return service.getUsers(rq.getUserId(), rq.getIds());
     }
 
     @KafkaHandler
-    @SendTo("t-node")
+    @SendTo("topic-client")
     public GotMapFriendIdsRsDto sendMapFriends(SendMapFriendsRqDto rq) {
         return service.getMapFriends(rq.getUserId(), rq.getMapId(), rq.getFids());
     }
@@ -40,31 +40,31 @@ public class KafkaListenerHandlers {
     }
 
     @KafkaHandler
-    @SendTo("t-node")
+    @SendTo("topic-client")
     public GotFriendsIdsRsDto sendFriendIdsBySocNet(SendFriendIdsBySocNetRqDto rq) {
         return service.getUserIdsFromSocNetIds(rq.getUserId(), rq.getFriendSocNetIds());
     }
 
     @KafkaHandler
-    @SendTo("t-node")
+    @SendTo("topic-client")
     public GotTopUsersRsDto sendTopUsers(SendTopUsersRqDto rq) {
         return service.getTopUsersRsDto(rq.getUserId(), rq.getFids());
     }
 
     @KafkaHandler
-    @SendTo("t-node")
+    @SendTo("topic-client")
     public SetOneHealthHideRsDto healthUp(HealthBackRqDto rq) {
         return service.healthUp(rq.getUserId());
     }
 
     @KafkaHandler
-    @SendTo("t-node")
+    @SendTo("topic-client")
     public SetOneHealthHideRsDto healthDown(HealthDownRqDto rq) {
         return service.healthDown(rq.getUserId());
     }
 
     @KafkaHandler
-    @SendTo("t-node")
+    @SendTo("topic-client")
     public UpdateUserInfoRsDto zeroLife(ZeroLifeRqDto rq) {
         return service.zeroLife(rq.getUserId());
     }
