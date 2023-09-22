@@ -16,6 +16,5 @@ public class AuthRqDto {
     private Long socNetUserId;
     private Long appId;
     private String authKey;
-
     private Long connectionId;
 }
