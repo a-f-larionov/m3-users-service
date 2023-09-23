@@ -8,9 +8,9 @@ spring:
     bootstrap-servers: kafka:9092
   
   datasource:
-    url: jdbc:mysql://localhost:33306/junit_local_tri_base
-    username: junit_local
-    password: password
+    url: jdbc:mysql://localhost:33306/junit_database
+    username: junit_user
+    password: junit_password
 
 socnet:
   vk:

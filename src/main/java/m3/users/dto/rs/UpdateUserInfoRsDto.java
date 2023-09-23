@@ -3,14 +3,14 @@ package m3.users.dto.rs;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-@ToString
-@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
 @Getter
 @Setter
-@SuperBuilder
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateUserInfoRsDto extends  UserIdRsDto{
+public class UpdateUserInfoRsDto extends UserIdRsDto {
     private long id;
     private long nextPointId;
     private long socNetUserId;

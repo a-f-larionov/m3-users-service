@@ -5,11 +5,11 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
+@SuperBuilder
 @Getter
 @Setter
-@SuperBuilder
-@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class GotMapFriendIdsRsDto extends UserIdRsDto{

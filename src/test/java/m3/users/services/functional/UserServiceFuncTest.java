@@ -61,20 +61,20 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
         // given
         var beforeCreateTm = System.currentTimeMillis() / 1000;
         var socNetUserId = getMaxSocNetUserId() + 1;
-        var authRqDto = createNewAuthRqDto(socNetUserId);
-        var created = userService.auth(authRqDto);
+        var rqDto = createNewAuthRqDto(socNetUserId);
+        var created = userService.auth(rqDto);
         jdbcTemplate.update("UPDATE users SET create_tm = " + (beforeCreateTm - 1000) + " WHERE id=" + created.getId());
         jdbcTemplate.update("UPDATE users SET login_tm = " + (beforeCreateTm - 1000) + " WHERE id=" + created.getId());
         created.setCreateTm(beforeCreateTm - 1000);
         created.setLoginTm(beforeCreateTm - 1000);
 
         // when
-        var rsDto = userService.auth(authRqDto);
+        var rsDto = userService.auth(rqDto);
 
         // then
         assertThat(rsDto.getId()).isEqualTo(created.getId());
-        assertThat(rsDto.getSocNetUserId()).isEqualTo(authRqDto.getSocNetType().getId());
-        assertThat(rsDto.getSocNetUserId()).isEqualTo(authRqDto.getSocNetUserId());
+        assertThat(rsDto.getSocNetTypeId()).isEqualTo(rqDto.getSocNetType().getId());
+        assertThat(rsDto.getSocNetUserId()).isEqualTo(rqDto.getSocNetUserId());
         assertThat(rsDto.getCreateTm()).isEqualTo(created.getCreateTm());
         assertThat(rsDto.getLoginTm()).isGreaterThanOrEqualTo(beforeCreateTm);
         assertThat(rsDto.getLoginTm()).isNotEqualTo(created.getLoginTm());
@@ -82,7 +82,7 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
         assertThat(rsDto.getFullRecoveryTime()).isEqualTo(created.getFullRecoveryTime());
         assertThat(rsDto.getNextPointId()).isEqualTo(1);
 
-        assertRsDtoEqualsDBState(rsDto, authRqDto.getConnectionId());
+        assertRsDtoEqualsDBState(rsDto, rqDto.getConnectionId());
     }
 
     @Test
@@ -238,11 +238,12 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
 
         //  when
         List<Long> requestIds = usersList.stream().map(UpdateUserInfoRsDto::getId).toList();
+        usersList.sort(Comparator.comparing(UpdateUserInfoRsDto::getNextPointId).reversed());
         GotTopUsersRsDto topUsersRsDto = userService.getTopUsersRsDto(userId, requestIds);
 
         //then
-        usersList.sort(Comparator.comparing(UpdateUserInfoRsDto::getNextPointId).reversed());
-        assertThat(topUsersRsDto).isEqualTo(expectedRs);
+        assertThat(topUsersRsDto.getUserId()).isEqualTo(expectedRs.getUserId());
+        assertThat(topUsersRsDto.getUsers()).isEqualTo(expectedRs.getUsers());
     }
 
     @Test
@@ -311,6 +312,7 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
         var userId = createUserAndSetPointId(socNetId, nextPointId);
         return UpdateUserInfoRsDto.builder()
                 .id(userId)
+                .userId(userId)
                 .socNetUserId(socNetId)
                 .nextPointId(nextPointId)
                 .fullRecoveryTime((Long) jdbcTemplate.queryForMap("SELECT fullRecoveryTime FROM users WHERE id= ? ", userId).get("FULLRECOVERYTIME"))

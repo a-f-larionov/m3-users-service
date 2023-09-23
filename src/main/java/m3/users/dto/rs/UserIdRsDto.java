@@ -5,12 +5,12 @@ import lombok.experimental.SuperBuilder;
 
 
 @SuperBuilder
-@NoArgsConstructor
-//@AllArgsConstructor
 @Getter
 @Setter
+@ToString(callSuper = true)
 @EqualsAndHashCode
-@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserIdRsDto {
     private Long userId;
 }
