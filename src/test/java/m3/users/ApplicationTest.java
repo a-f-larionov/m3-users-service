@@ -8,5 +8,4 @@ class ApplicationTest extends BaseSpringBootTest {
     void contextLoads() {
 
     }
-
 }

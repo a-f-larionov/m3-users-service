@@ -1,18 +1,10 @@
 filename: app-test
 spring:
-  autoconfigure:
-    exclude:
-      org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
-
-  kafka:
-    bootstrap-servers: kafka:9092
-  
   datasource:
     url: jdbc:mysql://localhost:33306/junit_database
     username: junit_user
     password: junit_password
 
-socnet:
-  vk:
-    appId: 123
-    secretKey: secretKey
+  autoconfigure:
+    exclude:
+      org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration

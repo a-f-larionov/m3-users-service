@@ -7,5 +7,4 @@ databaseChangeLog:
             sql: drop table users;
       changes:
         - sqlFile:
-            comment: "comment one"
             path: classpath:db\changelog\change-sets\create-users.sql

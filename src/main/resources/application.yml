@@ -1,12 +1,12 @@
 filename: app
 spring:
-  kafka:
-    bootstrap-servers: kafka:9092
-
   datasource:
     url: ${DATASOURCE_URL}
-    username: ${MYSQL_USER}
-    password: ${MYSQL_PASSWORD}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+  kafka:
+    bootstrap-servers: kafka:9092
 
 socnet:
   vk:
