@@ -8,6 +8,20 @@ spring:
   kafka:
     bootstrap-servers: kafka:9092
 
+  profiles:
+    group:
+      home: local, suppress_useless_logs, home
+      local: local, suppress_useless_logs
+
+logging:
+  level:
+    root: info
+
+alerter:
+  telegram:
+    chatId: ${TELEGRAM_CHAT_ID}
+    token: ${TELEGRAM_TOKEN}
+
 socnet:
   vk:
     appId: ${VK_APP_ID}

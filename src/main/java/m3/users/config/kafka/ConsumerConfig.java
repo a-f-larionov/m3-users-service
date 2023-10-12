@@ -32,8 +32,9 @@ public class ConsumerConfig {
                 BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress,
                 KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
                 VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class,
+
                 GROUP_ID_CONFIG, 2,
-                JsonDeserializer.TRUSTED_PACKAGES, "*"),
+                JsonDeserializer.TRUSTED_PACKAGES, "m3.users.dto.rq"),
 
                 new StringDeserializer(),
                 new ErrorHandlingDeserializer<>(new JsonDeserializer<>()));

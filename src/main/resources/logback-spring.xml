@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <springProperty scope="context" name="alerter.telegram.token" source="alerter.telegram.token"/>
+    <springProperty scope="context" name="alerter.telegram.chatId" source="alerter.telegram.chatId"/>
+
+    <turboFilter class="ch.qos.logback.classic.turbo.DuplicateMessageFilter">
+        <allowedRepetitions>0</allowedRepetitions>
+    </turboFilter>
+
+    <appender name="telegram" class="m3.users.logging.logback.TelegramAppender">
+        <chatId>${alerter.telegram.chatId}</chatId>
+        <token>${alerter.telegram.token}</token>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+
+        <encoder>
+            <pattern>
+                %d{yy-MM-dd HH:mm:ss} %p%n[%.50t]%n%.150logger%n%m
+            </pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="telegram"/>
+    </root>
+
+</configuration>
