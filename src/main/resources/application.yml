@@ -1,5 +1,9 @@
 filename: app
 spring:
+
+  application:
+    name: users-service
+
   datasource:
     url: ${DATASOURCE_URL}
     username: ${DB_USER}

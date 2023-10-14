@@ -9,21 +9,21 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-@Slf4j(topic = "users-service")
+@Slf4j(topic = "watcher")
 public class ApplicationStateWatcher {
 
     @EventListener(ApplicationReadyEvent.class)
     public void readyEvent() {
-        log.warn("Ready to survive ⭐!");
+        log.info("Ready to survive ⭐!");
     }
 
     @EventListener(ApplicationFailedEvent.class)
     public void failedEvent() {
-        log.warn("Failed to run ❌");
+        log.info("Failed to run ❌");
     }
 
     @PreDestroy
-    public void preDestroy(){
-        log.warn("Pre destroy state \uD83D\uDCA4");
+    public void preDestroy() {
+        log.info("Pre destroy state \uD83D\uDCA4");
     }
 }

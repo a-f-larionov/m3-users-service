@@ -2,15 +2,14 @@ package m3.users.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import m3.users.enums.SocNetType;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-@Builder
-@Table(name = "users")
 @Entity
+@Table(name = "users")
+@Builder
+@AllArgsConstructor
 public class UserEntity {
 
     @Id
