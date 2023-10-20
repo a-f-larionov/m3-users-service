@@ -9,7 +9,7 @@ FROM gradle:8.4-jdk17 as builder
 COPY --from=gradle-cache /home/gradle/cache_home /home/gradle/.gradle/
 COPY build.gradle settings.gradle ./
 COPY src/main ./src/main
-RUN bash -c "gradle build -x test"
+RUN bash -c "gradle build --no-daemon --info -x test"
 
 FROM amazoncorretto:17
 COPY --from=builder /home/gradle/build/libs/m3-users-service-0.0.1-SNAPSHOT.jar .
