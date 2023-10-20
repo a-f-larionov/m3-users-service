@@ -3,7 +3,7 @@ ENV GRADLE_USER_HOME /home/gradle/cache_home
 WORKDIR /home/gradle/java-code
 RUN mkdir -p /home/gradle/cache_home
 COPY build.gradle settings.gradle /home/gradle/java-code/
-RUN gradle clean build --no-daemon > /dev/null 2>&1 || true
+RUN bash -c "gradle clean build --no-daemon --info || true"
 
 FROM gradle:8.4-jdk17 as builder
 COPY --from=gradle-cache /home/gradle/cache_home /home/gradle/.gradle/
