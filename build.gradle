@@ -10,6 +10,11 @@ sourceCompatibility = '17'
 
 repositories {
     mavenCentral()
+    maven {
+        name = "reposiliteRepository"
+        setAllowInsecureProtocol(true)
+        url = uri("http://prod-server-2.ru:8082/releases")
+    }
 }
 
 dependencies {
