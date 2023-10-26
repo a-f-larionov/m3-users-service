@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import m3.users.entities.UserEntity;
 import m3.users.services.HealthService;
-import m3.users.settings.CommonSettings;
+import m3.lib.settings.CommonSettings;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -2,6 +2,7 @@ package m3.users.dto.rs;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import m3.lib.dto.rs.UserIdRsDto;
 
 @SuperBuilder
 @Getter
@@ -10,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthSuccessRsDto extends UserIdRsDto{
+public class AuthSuccessRsDto extends UserIdRsDto {
 
     private Long connectionId;
 

@@ -2,7 +2,9 @@ package m3.users.services.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import m3.users.commons.HttpExceptionError;
+import m3.lib.commons.HttpExceptionError;
+import m3.lib.settings.CommonSettings;
+import m3.lib.settings.MapSettings;
 import m3.users.dto.rq.AuthRqDto;
 import m3.users.dto.rs.*;
 import m3.users.entities.UserEntity;
@@ -12,8 +14,6 @@ import m3.users.repositories.UsersRepository;
 import m3.users.services.HealthService;
 import m3.users.services.SocNetService;
 import m3.users.services.UserService;
-import m3.users.settings.CommonSettings;
-import m3.users.settings.MapSettings;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static m3.users.commons.ErrorCodes.AUTH_FAILED;
+import static m3.lib.commons.ErrorCodes.AUTH_FAILED;
 
 @AllArgsConstructor
 @Slf4j

@@ -14,7 +14,7 @@
         <allowedRepetitions>0</allowedRepetitions>
     </turboFilter>
 
-    <appender name="watcher" class="m3.users.logging.logback.TelegramAppender">
+    <appender name="watcher" class="m3.lib.logging.logback.appender.TelegramAppender">
         <chatId>${alerter.telegram.chatId}</chatId>
         <token>${alerter.telegram.token}</token>
         <encoder>
@@ -24,7 +24,7 @@
         </encoder>
     </appender>
 
-    <appender name="telegram" class="m3.users.logging.logback.TelegramAppender">
+    <appender name="telegram" class="m3.lib.logging.logback.appender.TelegramAppender">
         <chatId>${alerter.telegram.chatId}</chatId>
         <token>${alerter.telegram.token}</token>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">

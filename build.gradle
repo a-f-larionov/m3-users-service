@@ -6,7 +6,10 @@ plugins {
 
 group = 'm3'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+}
 
 repositories {
     mavenLocal()
@@ -17,9 +20,9 @@ repositories {
         url = uri("http://prod-server-2.ru:8082/releases")
     }
     maven {
-        name = "localhost"
+        name = "reposiliteRepository"
         setAllowInsecureProtocol(true)
-        url = uri("http://localhost:8082/releases")
+        url = uri("http://prod-server-2.ru:8082/snapshots")
     }
 }
 
@@ -34,13 +37,13 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.32'
     implementation 'org.liquibase:liquibase-core'
 
-
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor "org.mapstruct:mapstruct-processor:1.5.3.Final"
 
+    implementation 'm3:m3-lib:1.0-SNAPSHOT'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testCompileOnly 'org.projectlombok:lombok'
