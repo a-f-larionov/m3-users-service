@@ -8,7 +8,7 @@ import m3.users.dto.rq.*;
 import m3.users.dto.rs.*;
 import m3.users.enums.SocNetType;
 import m3.users.mappers.UsersMapper;
-import m3.users.repositories.UsersRepository;
+import m3.lib.repositories.UsersRepository;
 import m3.users.services.HealthService;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;

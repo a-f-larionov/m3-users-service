@@ -1,5 +1,6 @@
 package m3.users.repositories;
 
+import m3.lib.repositories.UsersRepository;
 import m3.users.BaseDataJpaTest;
 import m3.lib.entities.UserEntity;
 import m3.users.enums.SocNetType;
@@ -106,19 +107,19 @@ public class UsersRepositoryTest extends BaseDataJpaTest {
     @Test
     void findAllByIdInOrderByNextPointIdDesc() {
         // given
-        var exitendsIds = new ArrayList<Long>();
+        var existentIds = new ArrayList<Long>();
 
         deleteAllUsers();
         insertOneUserWithNextPointId(1001, 5);
-        exitendsIds.add(insertOneUserWithNextPointId(1002, 10));
+        existentIds.add(insertOneUserWithNextPointId(1002, 10));
         insertOneUserWithNextPointId(1003, 5);
-        exitendsIds.add(insertOneUserWithNextPointId(1004, 30));
-        exitendsIds.add(insertOneUserWithNextPointId(1005, 20));
+        existentIds.add(insertOneUserWithNextPointId(1004, 30));
+        existentIds.add(insertOneUserWithNextPointId(1005, 20));
         insertOneUserWithNextPointId(1006, 25);
-        exitendsIds.add(insertOneUserWithNextPointId(1007, 50));
+        existentIds.add(insertOneUserWithNextPointId(1007, 50));
 
         // when
-        List<Long> result = usersRepository.findAllByIdInOrderByNextPointIdDesc(exitendsIds, Pageable.ofSize(3))
+        List<Long> result = usersRepository.findAllByIdInOrderByNextPointIdDesc(existentIds, Pageable.ofSize(3))
                 .stream().map(UserEntity::getNextPointId).toList();
 
         // then
