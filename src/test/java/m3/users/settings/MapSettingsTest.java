@@ -1,5 +1,6 @@
 package m3.users.settings;
 
+import m3.lib.settings.MapSettings;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -13,7 +13,7 @@ spring:
     bootstrap-servers: kafka:9092
     consumer:
       trusted_packages: "m3.users.dto.rq"
-    topicName: 'users-topic'
+    topicName: 'topic-users'
 
   profiles:
     group:

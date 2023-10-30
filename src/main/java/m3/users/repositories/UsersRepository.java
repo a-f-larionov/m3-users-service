@@ -1,12 +1,11 @@
 package m3.users.repositories;
 
-import m3.users.entities.UserEntity;
+import m3.lib.entities.UserEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.lang.NonNullApi;
 
 import java.util.List;
 import java.util.Optional;

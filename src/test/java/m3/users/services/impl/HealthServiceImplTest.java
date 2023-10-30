@@ -1,8 +1,8 @@
 package m3.users.services.impl;
 
-import m3.users.entities.UserEntity;
+import m3.lib.entities.UserEntity;
 import m3.users.services.HealthService;
-import m3.users.settings.CommonSettings;
+import m3.lib.settings.CommonSettings;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

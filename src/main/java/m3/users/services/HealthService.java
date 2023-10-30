@@ -1,6 +1,6 @@
 package m3.users.services;
 
-import m3.users.entities.UserEntity;
+import m3.lib.entities.UserEntity;
 
 public interface HealthService {
     boolean isMaxHealths(UserEntity user);

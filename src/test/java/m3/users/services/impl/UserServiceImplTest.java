@@ -1,13 +1,15 @@
 package m3.users.services.impl;
 
+import m3.lib.commons.ErrorCodes;
+import m3.lib.commons.HttpExceptionError;
+import m3.lib.entities.UserEntity;
+import m3.lib.settings.CommonSettings;
 import m3.users.dto.rq.*;
 import m3.users.dto.rs.*;
-import m3.users.entities.UserEntity;
 import m3.users.enums.SocNetType;
 import m3.users.mappers.UsersMapper;
 import m3.users.repositories.UsersRepository;
 import m3.users.services.HealthService;
-import m3.users.settings.CommonSettings;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -334,7 +336,7 @@ public class UserServiceImplTest {
         return GotFriendsIdsRsDto.builder().userId(userId).fids(expectedFids).build();
     }
 
-    private static SendFriendIdsBySocNetRqDto createSendFriendIdsBySocNetRqDto(long userId, List<Long> firendSocNetIds) {
-        return SendFriendIdsBySocNetRqDto.builder().userId(userId).friendSocNetIds(firendSocNetIds).build();
+    private static SendFriendIdsBySocNetRqDto createSendFriendIdsBySocNetRqDto(long userId, List<Long> friendSocNetIds) {
+        return SendFriendIdsBySocNetRqDto.builder().userId(userId).friendSocNetIds(friendSocNetIds).build();
     }
 }

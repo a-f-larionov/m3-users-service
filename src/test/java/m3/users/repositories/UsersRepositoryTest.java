@@ -1,7 +1,7 @@
 package m3.users.repositories;
 
 import m3.users.BaseDataJpaTest;
-import m3.users.entities.UserEntity;
+import m3.lib.entities.UserEntity;
 import m3.users.enums.SocNetType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

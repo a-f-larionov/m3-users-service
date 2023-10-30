@@ -2,7 +2,7 @@ package m3.users.services.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import m3.users.entities.UserEntity;
+import m3.lib.entities.UserEntity;
 import m3.users.services.HealthService;
 import m3.lib.settings.CommonSettings;
 import org.springframework.stereotype.Service;
