@@ -24,6 +24,16 @@
       "name": "socnet.vk.appId",
       "type": "java.lang.String",
       "description": "Description for socnet.vk.appId."
+    },
+    {
+      "name": "spring.kafka.consumer.trusted_packages",
+      "type": "java.lang.String",
+      "description": "Description for spring.kafka.consumer.trusted_packages."
+    },
+    {
+      "name": "spring.kafka.topicName",
+      "type": "java.lang.String",
+      "description": "Description for spring.kafka.topicName."
     }
   ]
 }
