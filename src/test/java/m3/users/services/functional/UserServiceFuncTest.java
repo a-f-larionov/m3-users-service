@@ -1,7 +1,7 @@
 package m3.users.services.functional;
 
-import m3.lib.settings.MapSettings;
 import m3.lib.settings.CommonSettings;
+import m3.lib.settings.MapSettings;
 import m3.users.BaseSpringBootTest;
 import m3.users.dto.rq.AuthRqDto;
 import m3.users.dto.rq.SendMapFriendsRqDto;
