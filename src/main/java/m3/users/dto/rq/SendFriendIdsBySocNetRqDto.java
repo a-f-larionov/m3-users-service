@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SendFriendIdsBySocNetRqDto extends UserIdRsDto {
-    private List<Long> friendSocNetIds;
+    private List<Long> fsids;
 }
 
 
