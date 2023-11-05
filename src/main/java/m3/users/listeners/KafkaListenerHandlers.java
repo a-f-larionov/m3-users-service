@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 @Component
-@KafkaListener(topics = "topic-users", groupId = "2")
+@KafkaListener(topics = "topic-users")
 public class KafkaListenerHandlers {
 
     private final UserServiceImpl service;
