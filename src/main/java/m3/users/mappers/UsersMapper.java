@@ -25,7 +25,7 @@ public interface UsersMapper {
     @Mapping(target = "createTm", source = "currentTm")
     @Mapping(target = "loginTm", source = "currentTm")
     @Mapping(target = "fullRecoveryTime", source = "currentTm")
-    @Mapping(target = "socNetTypeId", source = "authRqDto.socNetType")
+    @Mapping(target = "socNetTypeId", source = "authRqDto.socNetType.id")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "logoutTm", ignore = true)
     UserEntity forAuthNewUser(AuthRqDto authRqDto, Long currentTm, Long nextPointId);
