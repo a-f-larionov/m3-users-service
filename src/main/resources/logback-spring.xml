@@ -14,6 +14,8 @@
         <allowedRepetitions>0</allowedRepetitions>
     </turboFilter>
 
+    <conversionRule conversionWord="clm" converterClass="m3.lib.logging.CustomLogMessageConverter"/>
+
     <appender name="watcher" class="m3.lib.logging.logback.appender.TelegramAppender">
         <chatId>${alerter.telegram.chatId}</chatId>
         <token>${alerter.telegram.token}</token>
@@ -32,7 +34,7 @@
         </filter>
         <encoder>
             <pattern>
-                ${spring.application.name} %d{MM-dd HH:mm:ss} %p %.150logger %m
+                ${spring.application.name} %d{MM-dd HH:mm:ss} %p %.150logger %clm %nopex
             </pattern>
         </encoder>
     </appender>
