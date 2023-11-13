@@ -1,5 +1,6 @@
 package m3.users.enums;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -12,6 +13,7 @@ public enum SocNetType {
     VK(1L),
     Standalone(2L);
 
+    @JsonValue
     private final Long id;
 
     public static SocNetType of(Long socNetTypeId) {
