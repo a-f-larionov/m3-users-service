@@ -6,6 +6,7 @@ import m3.users.dto.rs.*;
 import m3.users.services.impl.UserServiceImpl;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +42,7 @@ public class KafkaListenerHandlers {
 
     @KafkaHandler
     @SendTo("topic-client")
-    public GotFriendsIdsRsDto sendFriendIdsBySocNet(SendFriendIdsBySocNetRqDto rq) {
+    public GotFriendsIdsRsDto sendFriendIdsBySocNet(@Payload   SendFriendIdsBySocNetRqDto rq) {
         return service.getUserIdsFromSocNetIds(rq.getUserId(), rq.getFriendSocNetIds());
     }
 

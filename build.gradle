@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.1.4'
+    id 'org.springframework.boot' version '3.1.5'
     id 'io.spring.dependency-management' version '1.1.3'
 }
 
@@ -14,33 +14,24 @@ java {
 repositories {
     mavenLocal()
     mavenCentral()
-    maven {
-        name = "reposiliteRepository"
-        setAllowInsecureProtocol(true)
-        url = uri("http://prod-server-2.ru:8082/releases")
-    }
-    maven {
-        name = "reposiliteRepository"
-        setAllowInsecureProtocol(true)
-        url = uri("http://prod-server-2.ru:8082/snapshots")
-    }
 }
 
 dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter'
-
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'mysql:mysql-connector-java:8.0.32'
 
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor "org.mapstruct:mapstruct-processor:1.5.3.Final"
+
 
     implementation 'm3:m3-lib:1.0-SNAPSHOT'
 

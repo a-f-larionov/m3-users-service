@@ -1,6 +1,7 @@
 package m3.users.services.impl;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import m3.lib.commons.HttpExceptionError;
 import m3.lib.entities.UserEntity;
@@ -114,7 +115,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GotFriendsIdsRsDto getUserIdsFromSocNetIds(Long userId, List<Long> friendSocNetIds) {
+    public GotFriendsIdsRsDto getUserIdsFromSocNetIds(@NonNull Long userId, @NonNull List<Long> friendSocNetIds) {
 
         List<Long> friendIds = null;
 
@@ -172,7 +173,7 @@ public class UserServiceImpl implements UserService {
 
         Optional<UserEntity> optionalUser = usersRepository.findById(userId);
 
-         if (optionalUser.isPresent()) {
+        if (optionalUser.isPresent()) {
             var user = optionalUser.get();
 
 
