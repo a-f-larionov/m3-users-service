@@ -5,7 +5,7 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import m3.lib.commons.HttpExceptionError;
 import m3.lib.entities.UserEntity;
-import m3.lib.repositories.UsersRepository;
+import m3.lib.repositories.UserRepository;
 import m3.lib.settings.CommonSettings;
 import m3.lib.settings.MapSettings;
 import m3.users.dto.rq.AuthRqDto;
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     private static final Long DEFAULT_NEXT_POINT_ID = 1L;
 
-    private final UsersRepository usersRepository;
+    private final UserRepository userRepository;
     private final UsersMapper mapper;
     private final SocNetService socNet;
     private final HealthService healthService;
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
         }
         UserEntity outUser;
 
-        Optional<UserEntity> existentUser = usersRepository
+        Optional<UserEntity> existentUser = userRepository
                 .findBySocNetTypeIdAndSocNetUserId(authRqDto.getSocNetType().getId(), authRqDto.getSocNetUserId());
 
         if (existentUser.isEmpty()) {
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
                     currentMills / 1000,
                     DEFAULT_NEXT_POINT_ID
             );
-            outUser = usersRepository.save(entity);
+            outUser = userRepository.save(entity);
         } else {
             outUser = existentUser.orElseThrow();
             var newLoginTime = System.currentTimeMillis() / 1000;
@@ -76,12 +76,12 @@ public class UserServiceImpl implements UserService {
     }
 
     private void updateLogin(Long id, Long newLoginTime) {
-        usersRepository.updateLogin(id, newLoginTime);
+        userRepository.updateLogin(id, newLoginTime);
     }
 
     public UpdateUserListInfoRsDto getUsers(Long userId, List<Long> ids) {
 
-        List<UserEntity> usersList = usersRepository.findAllByIdIn(ids);
+        List<UserEntity> usersList = userRepository.findAllByIdIn(ids);
 
         var list = usersList.stream()
                 .map(mapper::entityToDto)
@@ -95,13 +95,13 @@ public class UserServiceImpl implements UserService {
 
     public void updateLastLogout(Long userId) {
         //@todo moeve mills/1000 to one method
-        usersRepository.updateLastLogout(userId, System.currentTimeMillis() / 1000);
+        userRepository.updateLastLogout(userId, System.currentTimeMillis() / 1000);
     }
 
     @Override
     public GotMapFriendIdsRsDto getMapFriends(Long userId, Long mapId, List<Long> fids) {
 
-        var ids = usersRepository.gotMapFriends(
+        var ids = userRepository.gotMapFriends(
                 MapSettings.getFirstPointId(mapId),
                 MapSettings.getLastPointId(mapId),
                 fids
@@ -119,13 +119,13 @@ public class UserServiceImpl implements UserService {
 
         List<Long> friendIds = null;
 
-        Optional<UserEntity> optionalUser = usersRepository.findById(userId);
+        Optional<UserEntity> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             UserEntity user = optionalUser.get();
             if (user.getSocNetTypeId().equals(SocNetType.Standalone.getId())) {
-                friendIds = usersRepository.findAll().stream().map(UserEntity::getId).toList();
+                friendIds = userRepository.findAll().stream().map(UserEntity::getId).toList();
             } else {
-                friendIds = usersRepository.findIdBySocNetTypeIdAndSocNetUserIdIn(user.getSocNetTypeId(), friendSocNetIds);
+                friendIds = userRepository.findIdBySocNetTypeIdAndSocNetUserIdIn(user.getSocNetTypeId(), friendSocNetIds);
             }
         }
 
@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
 
     public GotTopUsersRsDto getTopUsersRsDto(Long userId, List<Long> ids) {
 
-        var users = usersRepository.findAllByIdInOrderByNextPointIdDesc(ids, Pageable.ofSize(CommonSettings.TOP_USERS_LIMIT))
+        var users = userRepository.findAllByIdInOrderByNextPointIdDesc(ids, Pageable.ofSize(CommonSettings.TOP_USERS_LIMIT))
                 .stream().map(mapper::entityToDto)
                 .toList();
 
@@ -150,14 +150,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public synchronized SetOneHealthHideRsDto healthUp(Long userId) {
 
-        Optional<UserEntity> optionalUser = usersRepository.findById(userId);
+        Optional<UserEntity> optionalUser = userRepository.findById(userId);
 
         if (optionalUser.isPresent()) {
             var user = optionalUser.get();
             if (!healthService.isMaxHealths(user)) {
                 healthService.setHealths(user,
                         healthService.getHealths(user) + 1);
-                usersRepository.updateHealth(user.getId(), user.getFullRecoveryTime());
+                userRepository.updateHealth(user.getId(), user.getFullRecoveryTime());
             }
             return SetOneHealthHideRsDto.builder()
                     .userId(userId)
@@ -171,7 +171,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public SetOneHealthHideRsDto healthDown(Long userId) {
 
-        Optional<UserEntity> optionalUser = usersRepository.findById(userId);
+        Optional<UserEntity> optionalUser = userRepository.findById(userId);
 
         if (optionalUser.isPresent()) {
             var user = optionalUser.get();
@@ -180,7 +180,7 @@ public class UserServiceImpl implements UserService {
             if (!healthService.getHealths(user).equals(0L)) {
                 healthService.setHealths(user,
                         healthService.getHealths(user) - 1);
-                usersRepository.updateHealth(user.getId(), user.getFullRecoveryTime());
+                userRepository.updateHealth(user.getId(), user.getFullRecoveryTime());
             }
             return SetOneHealthHideRsDto.builder()
                     .userId(userId)
@@ -194,7 +194,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UpdateUserInfoRsDto zeroLife(Long userId) {
 
-        Optional<UserEntity> optionalUser = usersRepository.findById(userId);
+        Optional<UserEntity> optionalUser = userRepository.findById(userId);
 
         if (optionalUser.isPresent()) {
             var user = optionalUser.get();
@@ -203,7 +203,7 @@ public class UserServiceImpl implements UserService {
                 return null;
             }
             healthService.setHealths(user, 0L);
-            usersRepository.updateHealth(user.getId(), user.getFullRecoveryTime());
+            userRepository.updateHealth(user.getId(), user.getFullRecoveryTime());
 
             return mapper.entityToDto(user);
         }
