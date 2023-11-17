@@ -1,7 +1,7 @@
 package m3.users.repositories;
 
 import m3.lib.entities.UserEntity;
-import m3.lib.repositories.UsersRepository;
+import m3.lib.repositories.UserRepository;
 import m3.users.BaseDataJpaTest;
 import m3.users.enums.SocNetType;
 import org.junit.jupiter.api.Test;
@@ -23,10 +23,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 })
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Commit
-public class UsersRepositoryTest extends BaseDataJpaTest {
+public class UserRepositoryTest extends BaseDataJpaTest {
 
     @Autowired
-    private UsersRepository usersRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -40,7 +40,7 @@ public class UsersRepositoryTest extends BaseDataJpaTest {
         var newLogoutTS = System.currentTimeMillis() / 1000;
 
         // when
-        int result = usersRepository.updateLastLogout(userId, newLogoutTS);
+        int result = userRepository.updateLastLogout(userId, newLogoutTS);
 
         // then
         assertEquals(1, result);
@@ -57,7 +57,7 @@ public class UsersRepositoryTest extends BaseDataJpaTest {
         var newLoginTS = System.currentTimeMillis() / 1000;
 
         // when
-        int result = usersRepository.updateLogin(userId, newLoginTS);
+        int result = userRepository.updateLogin(userId, newLoginTS);
 
         // then
         assertEquals(1, result);
@@ -78,7 +78,7 @@ public class UsersRepositoryTest extends BaseDataJpaTest {
         jdbcTemplate.update("INSERT INTO users(socNetTypeId, socNetUserId, nextPointId) VALUES(?, ?, ?)", 1, 7, 1000);
 
         // when
-        List<Long> ids = usersRepository.gotMapFriends(10L, 100L, List.of(3L, 4L, 5L, 6L, 2L));
+        List<Long> ids = userRepository.gotMapFriends(10L, 100L, List.of(3L, 4L, 5L, 6L, 2L));
 
         // then
         assertEquals(3, ids.size());
@@ -98,7 +98,7 @@ public class UsersRepositoryTest extends BaseDataJpaTest {
         allSocNetIds.forEach(id -> jdbcTemplate.update("INSERT INTO users(socNetTypeId, socNetUserId) VALUES(?, ?)", socNetTypeId, id));
 
         // when
-        List<Long> result = usersRepository.findIdBySocNetTypeIdAndSocNetUserIdIn(socNetTypeId, requestedSocNetIds);
+        List<Long> result = userRepository.findIdBySocNetTypeIdAndSocNetUserIdIn(socNetTypeId, requestedSocNetIds);
 
         // then
         assertEquals(requestedSocNetIds.size(), result.size());
@@ -119,7 +119,7 @@ public class UsersRepositoryTest extends BaseDataJpaTest {
         existentIds.add(insertOneUserWithNextPointId(1007, 50));
 
         // when
-        List<Long> result = usersRepository.findAllByIdInOrderByNextPointIdDesc(existentIds, Pageable.ofSize(3))
+        List<Long> result = userRepository.findAllByIdInOrderByNextPointIdDesc(existentIds, Pageable.ofSize(3))
                 .stream().map(UserEntity::getNextPointId).toList();
 
         // then
@@ -138,7 +138,7 @@ public class UsersRepositoryTest extends BaseDataJpaTest {
         var fullRecoveryTime = 10001L;
 
         // when
-        usersRepository.updateHealth(userId, fullRecoveryTime);
+        userRepository.updateHealth(userId, fullRecoveryTime);
 
         // then
         var actualValue = jdbcTemplate.queryForMap("SELECT fullRecoveryTime FROM users WHERE id = ? ", userId).get("FULLRECOVERYTIME");

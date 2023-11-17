@@ -3,7 +3,7 @@ package m3.users.services.impl;
 import m3.lib.commons.ErrorCodes;
 import m3.lib.commons.HttpExceptionError;
 import m3.lib.entities.UserEntity;
-import m3.lib.repositories.UsersRepository;
+import m3.lib.repositories.UserRepository;
 import m3.lib.settings.CommonSettings;
 import m3.users.dto.rq.*;
 import m3.users.dto.rs.*;
@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
 public class UserServiceImplTest {
 
     private final UsersMapper mapper = Mockito.mock(UsersMapper.class);
-    private final UsersRepository repo = Mockito.mock(UsersRepository.class);
+    private final UserRepository repo = Mockito.mock(UserRepository.class);
     private final SocNetServiceImpl socNet = Mockito.mock(SocNetServiceImpl.class);
     private final HealthService healthService = Mockito.mock(HealthService.class);
     private final UserServiceImpl service = new UserServiceImpl(repo, mapper, socNet, healthService);
