@@ -2,6 +2,7 @@ package m3.users.services.impl;
 
 import m3.lib.commons.ErrorCodes;
 import m3.lib.commons.HttpExceptionError;
+import m3.lib.dto.rs.UpdateUserInfoRsDto;
 import m3.lib.entities.UserEntity;
 import m3.lib.repositories.UserRepository;
 import m3.lib.settings.CommonSettings;

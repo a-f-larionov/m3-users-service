@@ -1,5 +1,6 @@
 package m3.users.services;
 
+import m3.lib.dto.rs.UpdateUserInfoRsDto;
 import m3.users.dto.rq.AuthRqDto;
 import m3.users.dto.rs.*;
 

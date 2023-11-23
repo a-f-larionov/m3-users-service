@@ -1,5 +1,6 @@
 package m3.users.services.functional;
 
+import m3.lib.dto.rs.UpdateUserInfoRsDto;
 import m3.lib.settings.CommonSettings;
 import m3.lib.settings.MapSettings;
 import m3.users.BaseSpringBootTest;

@@ -1,6 +1,7 @@
 package m3.users.listeners;
 
 import lombok.AllArgsConstructor;
+import m3.lib.dto.rs.UpdateUserInfoRsDto;
 import m3.users.dto.rq.*;
 import m3.users.dto.rs.*;
 import m3.users.services.impl.UserServiceImpl;

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import m3.lib.commons.HttpExceptionError;
+import m3.lib.dto.rs.UpdateUserInfoRsDto;
 import m3.lib.entities.UserEntity;
 import m3.lib.repositories.UserRepository;
 import m3.lib.settings.CommonSettings;
