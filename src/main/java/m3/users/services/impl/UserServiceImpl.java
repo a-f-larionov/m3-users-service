@@ -1,11 +1,12 @@
 package m3.users.services.impl;
 
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import m3.lib.commons.HttpExceptionError;
 import m3.lib.dto.rs.UpdateUserInfoRsDto;
 import m3.lib.entities.UserEntity;
+import m3.lib.helpers.TelegramSender;
 import m3.lib.repositories.UserRepository;
 import m3.lib.settings.CommonSettings;
 import m3.lib.settings.MapSettings;
@@ -16,6 +17,7 @@ import m3.users.mappers.UsersMapper;
 import m3.users.services.HealthService;
 import m3.users.services.SocNetService;
 import m3.users.services.UserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +27,7 @@ import java.util.Optional;
 
 import static m3.lib.commons.ErrorCodes.AUTH_FAILED;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 @Service
 @Transactional
@@ -37,6 +39,11 @@ public class UserServiceImpl implements UserService {
     private final UsersMapper mapper;
     private final SocNetService socNet;
     private final HealthService healthService;
+    @Value("${alerter.telegram.token}")
+    private String teleToken;
+    @Value("${alerter.telegram.chatId}")
+    private String chatId;
+
     //private final LogService logg;
 
     public AuthSuccessRsDto auth(AuthRqDto authRqDto) {
@@ -66,12 +73,9 @@ public class UserServiceImpl implements UserService {
             outUser.setLoginTm(newLoginTime);
         }
 
-        //log.warn("df)");
-        //telega.send("🥰" +url);
-        //socNet.getUrl();
-        //// var url = SocNet(user.socNetTypeId).getUserProfileUrl(user.socNetUserId);
-        //    // Logs.log("🥰 ", Logs.LEVEL_NOTIFY, url, Logs.CHANNEL_TELEGRAM);
-
+        TelegramSender.getInstance().sendToTelegram(
+                "Игрок вошел в игру 🥰 " + outUser.getId() +
+                        " http://vk.com/id" + outUser.getSocNetUserId(), teleToken, chatId);
 
         return mapper.entityToAuthSuccessRsDto(outUser, authRqDto.getConnectionId());
     }
