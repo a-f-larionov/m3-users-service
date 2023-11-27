@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import m3.lib.commons.HttpExceptionError;
 import m3.lib.dto.rs.UpdateUserInfoRsDto;
 import m3.lib.entities.UserEntity;
+import m3.lib.enums.ClientLogLevels;
 import m3.lib.helpers.TelegramSender;
+import m3.lib.kafka.sender.CommonSender;
 import m3.lib.repositories.UserRepository;
 import m3.lib.settings.CommonSettings;
 import m3.lib.settings.MapSettings;
@@ -39,6 +41,7 @@ public class UserServiceImpl implements UserService {
     private final UsersMapper mapper;
     private final SocNetService socNet;
     private final HealthService healthService;
+    private final CommonSender commonSender;
     @Value("${alerter.telegram.token}")
     private String teleToken;
     @Value("${alerter.telegram.chatId}")
@@ -100,6 +103,7 @@ public class UserServiceImpl implements UserService {
 
     public void updateLastLogout(Long userId) {
         //@todo moeve mills/1000 to one method
+        commonSender.log(userId, "User logout", ClientLogLevels.INFO, true);
         userRepository.updateLastLogout(userId, System.currentTimeMillis() / 1000);
     }
 
