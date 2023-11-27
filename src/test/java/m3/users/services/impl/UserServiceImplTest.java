@@ -8,7 +8,7 @@ import m3.lib.repositories.UserRepository;
 import m3.lib.settings.CommonSettings;
 import m3.users.dto.rq.*;
 import m3.users.dto.rs.*;
-import m3.users.enums.SocNetType;
+import m3.lib.enums.SocNetType;
 import m3.users.mappers.UsersMapper;
 import m3.users.services.HealthService;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;

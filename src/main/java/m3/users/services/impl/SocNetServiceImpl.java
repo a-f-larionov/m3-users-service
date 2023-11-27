@@ -2,7 +2,7 @@ package m3.users.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import m3.users.dto.rq.AuthRqDto;
-import m3.users.enums.SocNetType;
+import m3.lib.enums.SocNetType;
 import m3.users.services.SocNetService;
 import m3.users.services.SocNetSwitcher;
 import org.springframework.stereotype.Service;

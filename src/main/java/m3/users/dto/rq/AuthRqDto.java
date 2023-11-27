@@ -1,7 +1,7 @@
 package m3.users.dto.rq;
 
 import lombok.*;
-import m3.users.enums.SocNetType;
+import m3.lib.enums.SocNetType;
 
 @Builder
 @Getter

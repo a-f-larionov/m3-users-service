@@ -7,7 +7,7 @@ import m3.users.BaseSpringBootTest;
 import m3.users.dto.rq.AuthRqDto;
 import m3.users.dto.rq.SendMapFriendsRqDto;
 import m3.users.dto.rs.*;
-import m3.users.enums.SocNetType;
+import m3.lib.enums.SocNetType;
 import m3.users.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

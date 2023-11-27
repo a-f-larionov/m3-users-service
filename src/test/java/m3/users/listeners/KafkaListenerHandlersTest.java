@@ -5,7 +5,7 @@ import m3.users.dto.rs.AuthSuccessRsDto;
 import m3.users.dto.rs.GotFriendsIdsRsDto;
 import m3.users.dto.rs.GotMapFriendIdsRsDto;
 import m3.users.dto.rs.UpdateUserListInfoRsDto;
-import m3.users.enums.SocNetType;
+import m3.lib.enums.SocNetType;
 import m3.users.services.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

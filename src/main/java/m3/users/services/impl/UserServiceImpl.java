@@ -12,7 +12,7 @@ import m3.lib.settings.CommonSettings;
 import m3.lib.settings.MapSettings;
 import m3.users.dto.rq.AuthRqDto;
 import m3.users.dto.rs.*;
-import m3.users.enums.SocNetType;
+import m3.lib.enums.SocNetType;
 import m3.users.mappers.UsersMapper;
 import m3.users.services.HealthService;
 import m3.users.services.SocNetService;

@@ -4,7 +4,7 @@ import m3.lib.entities.UserEntity;
 import m3.users.dto.rq.AuthRqDto;
 import m3.users.dto.rs.AuthSuccessRsDto;
 import m3.lib.dto.rs.UpdateUserInfoRsDto;
-import m3.users.enums.SocNetType;
+import m3.lib.enums.SocNetType;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

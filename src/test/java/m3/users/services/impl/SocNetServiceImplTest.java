@@ -1,7 +1,7 @@
 package m3.users.services.impl;
 
 import m3.users.dto.rq.AuthRqDto;
-import m3.users.enums.SocNetType;
+import m3.lib.enums.SocNetType;
 import m3.users.services.SocNetService;
 import org.junit.jupiter.api.Test;
 
