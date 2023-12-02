@@ -1,4 +1,1 @@
-rootProject.name = 'm3-users-service'
-
-include('m3-lib')
-project(":m3-lib").projectDir = new File('../m3-lib/')
+include ":m3-lib"

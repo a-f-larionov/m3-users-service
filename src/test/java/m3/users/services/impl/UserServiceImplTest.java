@@ -4,16 +4,16 @@ import m3.lib.commons.ErrorCodes;
 import m3.lib.commons.HttpExceptionError;
 import m3.lib.dto.rs.UpdateUserInfoRsDto;
 import m3.lib.entities.UserEntity;
+import m3.lib.enums.SocNetType;
+import m3.lib.kafka.sender.CommonSender;
 import m3.lib.repositories.UserRepository;
 import m3.lib.settings.CommonSettings;
 import m3.users.dto.rq.*;
 import m3.users.dto.rs.*;
-import m3.lib.enums.SocNetType;
 import m3.users.mappers.UsersMapper;
 import m3.users.services.HealthService;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -27,11 +27,12 @@ import static org.mockito.Mockito.*;
 
 public class UserServiceImplTest {
 
-    private final UsersMapper mapper = Mockito.mock(UsersMapper.class);
-    private final UserRepository repo = Mockito.mock(UserRepository.class);
-    private final SocNetServiceImpl socNet = Mockito.mock(SocNetServiceImpl.class);
-    private final HealthService healthService = Mockito.mock(HealthService.class);
-    private final UserServiceImpl service = new UserServiceImpl(repo, mapper, socNet, healthService);
+    private final UsersMapper mapper = mock(UsersMapper.class);
+    private final UserRepository repo = mock(UserRepository.class);
+    private final SocNetServiceImpl socNet = mock(SocNetServiceImpl.class);
+    private final HealthService healthService = mock(HealthService.class);
+    private final CommonSender commonSender = mock(CommonSender.class);
+    private final UserServiceImpl service = new UserServiceImpl(repo, mapper, socNet, healthService, commonSender);
 
     @Test
     void authNewUser() {
