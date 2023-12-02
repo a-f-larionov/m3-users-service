@@ -43,7 +43,7 @@ public class UserServiceImplTest {
                 .build();
         when(socNet.checkAuth(any())).thenReturn(true);
         when(repo.findBySocNetTypeIdAndSocNetUserId(any(), any())).thenReturn(Optional.empty());
-
+        when(repo.save(any())).thenReturn(UserEntity.builder().build());
         // when
         service.auth(authRqDto);
 
