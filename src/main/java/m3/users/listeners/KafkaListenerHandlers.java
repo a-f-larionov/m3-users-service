@@ -62,7 +62,7 @@ public class KafkaListenerHandlers {
     @KafkaHandler
     @SendTo("topic-client")
     public SetOneHealthHideRsDto healthDown(HealthDownRqDto rq) {
-        return service.healthDown(rq.getUserId());
+        return service.healthDown(rq.getUserId(), rq.getPointId());
     }
 
     @KafkaHandler

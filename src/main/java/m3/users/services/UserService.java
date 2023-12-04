@@ -22,7 +22,7 @@ public interface UserService {
 
     SetOneHealthHideRsDto healthUp(Long userId);
 
-    SetOneHealthHideRsDto healthDown(Long userId);
+    SetOneHealthHideRsDto healthDown(Long userId, Long pointId);
 
     UpdateUserInfoRsDto zeroLife(Long userId);
 }

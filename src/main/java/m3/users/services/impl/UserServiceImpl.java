@@ -7,6 +7,7 @@ import m3.lib.commons.HttpExceptionError;
 import m3.lib.dto.rs.UpdateUserInfoRsDto;
 import m3.lib.entities.UserEntity;
 import m3.lib.enums.ClientLogLevels;
+import m3.lib.enums.StatisticEnum;
 import m3.lib.helpers.TelegramSender;
 import m3.lib.kafka.sender.CommonSender;
 import m3.lib.repositories.UserRepository;
@@ -46,8 +47,6 @@ public class UserServiceImpl implements UserService {
     private String teleToken;
     @Value("${alerter.telegram.chatId}")
     private String chatId;
-
-    //private final LogService logg;
 
     public AuthSuccessRsDto auth(AuthRqDto authRqDto) {
 
@@ -178,19 +177,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public SetOneHealthHideRsDto healthDown(Long userId) {
+    public SetOneHealthHideRsDto healthDown(Long userId, Long pointId) {
 
         Optional<UserEntity> optionalUser = userRepository.findById(userId);
 
         if (optionalUser.isPresent()) {
             var user = optionalUser.get();
 
-
             if (!healthService.getHealths(user).equals(0L)) {
                 healthService.setHealths(user,
                         healthService.getHealths(user) - 1);
                 userRepository.updateHealth(user.getId(), user.getFullRecoveryTime());
             }
+            commonSender.statistic(userId, StatisticEnum.ID_START_PLAY, pointId.toString());
+
             return SetOneHealthHideRsDto.builder()
                     .userId(userId)
                     .oneHealthHide(true)

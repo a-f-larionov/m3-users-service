@@ -11,4 +11,5 @@ import m3.lib.dto.rs.UserIdRsDto;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class HealthDownRqDto extends UserIdRsDto {
+    private Long pointId;
 }
