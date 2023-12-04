@@ -283,7 +283,11 @@ public class UserServiceImplTest {
     void healthDown() {
         // given
         var userId = 123L;
-        var rq = HealthBackRqDto.builder().userId(userId).build();
+        var pointId = 345L;
+        var rq = HealthDownRqDto.builder()
+                .userId(userId)
+                .pointId(pointId)
+                .build();
         var fullRecoveryTime = (System.currentTimeMillis() / 1000L) + 100;
         var expectedRs = SetOneHealthHideRsDto.builder()
                 .userId(userId)
@@ -297,7 +301,7 @@ public class UserServiceImplTest {
         when(healthService.getHealths(any())).thenReturn(3L);
 
         // when
-        var actualRs = service.healthDown(rq.getUserId());
+        var actualRs = service.healthDown(rq.getUserId(), rq.getPointId());
 
         // then
         verify(repo).findById(userId);

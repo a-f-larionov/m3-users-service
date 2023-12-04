@@ -123,13 +123,16 @@ public class KafkaListenerHandlersTest {
     @Test
     void healthDown() {
         // given
-        var rq = HealthDownRqDto.builder().build();
+        var rq = HealthDownRqDto.builder()
+                .userId(123L)
+                .pointId(345L)
+                .build();
 
         // when
         listener.healthDown(rq);
 
         // then
-        verify(service).healthDown(eq(rq.getUserId()));
+        verify(service).healthDown(eq(rq.getUserId()), eq(rq.getPointId()));
     }
 
     private AuthSuccessRsDto createAuthSuccessRsDto() {

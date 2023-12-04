@@ -292,14 +292,14 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
         // given
         deleteAllUsers();
         var userId = createUser(1000L);
-
+        var pointId = 123L;
 
         jdbcTemplate.update("UPDATE users SET fullRecoveryTime = ? WHERE id = ? ",
                 (System.currentTimeMillis() / 1000L) + CommonSettings.HEALTH_RECOVERY_TIME * 2
                 , userId);
 
         // when
-        SetOneHealthHideRsDto actualRs = userService.healthDown(userId);
+        SetOneHealthHideRsDto actualRs = userService.healthDown(userId, pointId);
 
         // then
         assertThat(actualRs.getUserId()).isEqualTo(userId);
