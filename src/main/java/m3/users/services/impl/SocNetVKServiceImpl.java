@@ -30,11 +30,13 @@ public class SocNetVKServiceImpl implements SocNetService {
     }
 
     private String calcSign(AuthRqDto authRqDto) {
-        return DigestUtils.md5DigestAsHex((authRqDto.getAppId().toString() +
-                "_" +
-                authRqDto.getSocNetUserId().toString() +
-                "_" +
-                secretKey).getBytes());
+        return DigestUtils.md5DigestAsHex((
+                authRqDto.getAppId().toString() +
+                        "_" +
+                        authRqDto.getSocNetUserId().toString() +
+                        "_" +
+                        secretKey)
+                .getBytes());
     }
 
 }
