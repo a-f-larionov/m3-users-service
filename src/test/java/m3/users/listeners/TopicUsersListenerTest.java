@@ -22,6 +22,7 @@ public class TopicUsersListenerTest {
 
     private final TopicUsersListener listener = new TopicUsersListener(service);
 
+    //@todo  check it! Most of these are self-explanatory, but the one we should highlight is the consumer property auto-offset-reset: earliest.
     @Test
     void auth() {
         // given
