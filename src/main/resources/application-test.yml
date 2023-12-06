@@ -16,5 +16,5 @@ alerter:
 
 socnet:
   vk:
-    appId: 123
-    secretKey: secretKey
+    appId: 123456789
+    secretKey: "vk_secret_key"

@@ -15,11 +15,6 @@ spring:
       trusted_packages: "m3.users.dto.rq"
     topicName: 'topic-users'
 
-  profiles:
-    group:
-      home: local, suppress_useless_logs, home
-      local: local, suppress_useless_logs
-
 logging:
   level:
     root: info

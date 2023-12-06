@@ -16,11 +16,11 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class KafkaListenerHandlersTest {
+public class TopicUsersListenerTest {
 
     private final UserServiceImpl service = Mockito.mock(UserServiceImpl.class);
 
-    private final KafkaListenerHandlers listener = new KafkaListenerHandlers(service);
+    private final TopicUsersListener listener = new TopicUsersListener(service);
 
     @Test
     void auth() {
