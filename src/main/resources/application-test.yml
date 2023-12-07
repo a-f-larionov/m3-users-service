@@ -1,13 +1,16 @@
 filename: app-test
 spring:
+
   datasource:
     url: jdbc:mysql://localhost:13306/junit_database
     username: junit_user
     password: junit_password
 
-  autoconfigure:
-    exclude:
-      org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      auto-offset-reset: earliest
+      group-id: group_id_1
 
 alerter:
   telegram:
