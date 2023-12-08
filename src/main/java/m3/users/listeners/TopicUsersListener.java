@@ -20,11 +20,11 @@ public class TopicUsersListener {
 
     private final UserService service;
 
-    @KafkaListener(topics = "topic-users")
-    public void receive(ConsumerRecord<?, ?> consumerRecord) {
-        System.out.println("!!!!");
-        System.out.println(consumerRecord);
-    }
+//    @KafkaListener(topics = "topic-users")
+//    public void receive(ConsumerRecord<?, ?> consumerRecord) {
+//        System.out.println("!!!!");
+//        System.out.println(consumerRecord);
+//    }
 
     @KafkaHandler
     @SendTo("topic-client")

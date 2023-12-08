@@ -54,7 +54,6 @@ public class TopicUsersListenerFuncTest {
                 .authKey(authKey)
                 .build());
 
-
         verify(userService, timeout(100000)).auth(any());
         //@todo how to wait until kafka consume some
     }
