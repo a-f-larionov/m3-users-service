@@ -1,7 +1,9 @@
 package m3.users.listeners;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import m3.lib.dto.rs.UpdateUserInfoRsDto;
+import m3.lib.kafka.KafkaListenerErrorHandler;
 import m3.users.dto.rq.*;
 import m3.users.dto.rs.*;
 import m3.users.services.UserService;
@@ -15,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 @Component
-@KafkaListener(topics = "topic-users")
+@KafkaListener(topics = "topic-users", errorHandler = "kafkaListenerErrorHandler")
 public class TopicUsersListener {
 
     private final UserService service;
@@ -28,7 +30,7 @@ public class TopicUsersListener {
 
     @KafkaHandler
     @SendTo("topic-client")
-    public AuthSuccessRsDto auth(AuthRqDto authRqDto) {
+    public AuthSuccessRsDto auth(@Valid @Payload AuthRqDto authRqDto) {
         System.out.println("!!!!!!!!!!");
         return service.auth(authRqDto);
     }
@@ -52,7 +54,7 @@ public class TopicUsersListener {
 
     @KafkaHandler
     @SendTo("topic-client")
-    public GotFriendsIdsRsDto sendFriendIdsBySocNet(@Payload   SendFriendIdsBySocNetRqDto rq) {
+    public GotFriendsIdsRsDto sendFriendIdsBySocNet(@Payload SendFriendIdsBySocNetRqDto rq) {
         return service.getUserIdsFromSocNetIds(rq.getUserId(), rq.getFriendSocNetIds());
     }
 

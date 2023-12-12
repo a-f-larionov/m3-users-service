@@ -22,15 +22,27 @@
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <org.projectlombok.version>1.18.30</org.projectlombok.version>
         <com.fasterxml.jackson.core.version>2.16.0</com.fasterxml.jackson.core.version>
+        <m3.m3-lib.version>1.0-SNAPSHOT</m3.m3-lib.version>
 
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
         </dependency>
 
         <dependency>
@@ -53,7 +65,7 @@
         <dependency>
             <groupId>m3</groupId>
             <artifactId>m3-lib</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${m3.m3-lib.version}</version>
         </dependency>
 
         <dependency>
@@ -61,6 +73,7 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
+
 
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -80,10 +93,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
     </dependencies>
 
     <build>

@@ -12,9 +12,3 @@ socnet:
   vk:
     appId: 123456789
     secretKey: "vk_secret_key"
-
-logging:
-  level:
-    org:
-      apache:
-        kafka: warn

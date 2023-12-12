@@ -7,10 +7,7 @@ spring:
     password: junit_password
 
   kafka:
-    bootstrap-servers: kafka:9092
-    consumer:
-      auto-offset-reset: earliest
-      group-id: group_id_1
+    bootstrap-servers: kafka:29092
 
 alerter:
   telegram:
