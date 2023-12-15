@@ -1,0 +1,30 @@
+filename: app
+spring:
+
+  application:
+    name: users-service
+
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      trusted_packages: "m3.users.dto.rq"
+    topicName: 'topic-users'
+
+logging:
+  level:
+    root: info
+
+alerter:
+  telegram:
+    chatId: ${TELEGRAM_CHAT_ID}
+    token: ${TELEGRAM_TOKEN}
+
+socnet:
+  vk:
+    appId: ${VK_APP_ID}
+    secretKey: ${VK_SECRET_KEY}

@@ -1,0 +1,39 @@
+{
+  "properties": [
+    {
+      "name": "filename",
+      "type": "java.lang.String",
+      "description": "Description for filename, Docker use it."
+    },
+    {
+      "name": "app.logTriggerLevel",
+      "type": "java.lang.String",
+      "description": "Description for app.logTriggerLevel. Log level TRACE, DEBUG, INFO, WARN, ERROR."
+    },
+    {
+      "name": "alerter.telegram.chatId",
+      "type": "java.lang.String",
+      "description": "Telegram chatId for alerter."
+    },
+    {
+      "name": "alerter.telegram.token",
+      "type": "java.lang.String",
+      "description": "Telegram token for alerter."
+    },
+    {
+      "name": "socnet.vk.appId",
+      "type": "java.lang.String",
+      "description": "Description for socnet.vk.appId."
+    },
+    {
+      "name": "spring.kafka.consumer.trusted_packages",
+      "type": "java.lang.String",
+      "description": "Description for spring.kafka.consumer.trusted_packages."
+    },
+    {
+      "name": "spring.kafka.topicName",
+      "type": "java.lang.String",
+      "description": "Description for spring.kafka.topicName."
+    }
+  ]
+}

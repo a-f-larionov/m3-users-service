@@ -31,7 +31,7 @@ public class TopicUsersListener {
     @KafkaHandler
     @SendTo("topic-client")
     public AuthSuccessRsDto auth(@Valid @Payload AuthRqDto authRqDto) {
-        System.out.println("!!!!!!!!!!");
+//        System.out.println("!!!!!!!!!!" + authRqDto.toString());
         return service.auth(authRqDto);
     }
 
