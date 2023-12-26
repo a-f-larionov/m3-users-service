@@ -3,12 +3,9 @@ package m3.users.listeners;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import m3.lib.dto.rs.UpdateUserInfoRsDto;
-import m3.lib.kafka.KafkaListenerErrorHandler;
 import m3.users.dto.rq.*;
 import m3.users.dto.rs.*;
 import m3.users.services.UserService;
-import m3.users.services.impl.UserServiceImpl;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -17,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 @Component
-@KafkaListener(topics = "topic-users", errorHandler = "kafkaListenerErrorHandler")
+@KafkaListener(topics = "topic-users"/*, errorHandler = "kafkaListenerErrorHandler"*/)
 public class TopicUsersListener {
 
     private final UserService service;
