@@ -14,21 +14,14 @@ import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 @Component
-@KafkaListener(topics = "topic-users"/*, errorHandler = "kafkaListenerErrorHandler"*/)
+@KafkaListener(topics = "topic-users")
 public class TopicUsersListener {
 
     private final UserService service;
 
-//    @KafkaListener(topics = "topic-users")
-//    public void receive(ConsumerRecord<?, ?> consumerRecord) {
-//        System.out.println("!!!!");
-//        System.out.println(consumerRecord);
-//    }
-
     @KafkaHandler
     @SendTo("topic-client")
     public AuthSuccessRsDto auth(@Valid @Payload AuthRqDto authRqDto) {
-//        System.out.println("!!!!!!!!!!" + authRqDto.toString());
         return service.auth(authRqDto);
     }
 
