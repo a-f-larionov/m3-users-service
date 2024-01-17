@@ -11,8 +11,8 @@ spring:
 
 alerter:
   telegram:
-    chatId: -1001958935656
-    token: 1194574646:AAEWS0EP5ABnnFITO924snE30pcD9284Hbc
+    chatId: -1234567890123
+    token: 1234567890:THISISATESTATOKENABCDEFGHUJIKLMNOPQ
 
 socnet:
   vk:
