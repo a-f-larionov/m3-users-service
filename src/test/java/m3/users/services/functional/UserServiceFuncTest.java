@@ -1,13 +1,13 @@
 package m3.users.services.functional;
 
 import m3.lib.dto.rs.UpdateUserInfoRsDto;
+import m3.lib.enums.SocNetType;
 import m3.lib.settings.CommonSettings;
 import m3.lib.settings.MapSettings;
 import m3.users.BaseSpringBootTest;
 import m3.users.dto.rq.AuthRqDto;
 import m3.users.dto.rq.SendMapFriendsRqDto;
 import m3.users.dto.rs.*;
-import m3.lib.enums.SocNetType;
 import m3.users.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -335,8 +335,8 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
     }
 
     private AuthRqDto createNewAuthRqDto(Long socNetUserId) {
-        var secretKey = "secretKey";
         var appId = 123L;
+        var secretKey = "vk_secret_key";
         return AuthRqDto.builder()
                 .socNetType(SocNetType.VK)
                 .socNetUserId(socNetUserId)

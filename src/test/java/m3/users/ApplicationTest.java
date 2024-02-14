@@ -6,10 +6,5 @@ class ApplicationTest extends BaseSpringBootTest {
 
     @Test
     void contextLoads() {
-
     }
-
-
-
-
 }

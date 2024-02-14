@@ -8,17 +8,15 @@ import m3.users.dto.rs.GotMapFriendIdsRsDto;
 import m3.users.dto.rs.UpdateUserListInfoRsDto;
 import m3.users.services.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class TopicUsersListenerTest {
 
-    private final UserServiceImpl service = Mockito.mock(UserServiceImpl.class);
+    private final UserServiceImpl service = mock(UserServiceImpl.class);
 
     private final TopicUsersListener listener = new TopicUsersListener(service);
 
