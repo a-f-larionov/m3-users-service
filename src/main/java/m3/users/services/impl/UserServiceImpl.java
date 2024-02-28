@@ -82,10 +82,6 @@ public class UserServiceImpl implements UserService {
         return mapper.entityToAuthSuccessRsDto(outUser, authRqDto.getConnectionId());
     }
 
-    private void updateLogin(Long id, Long newLoginTime) {
-        userRepository.updateLogin(id, newLoginTime);
-    }
-
     public UpdateUserListInfoRsDto getUsers(Long userId, List<Long> ids) {
 
         List<UserEntity> usersList = userRepository.findAllByIdIn(ids);
@@ -217,5 +213,9 @@ public class UserServiceImpl implements UserService {
             return mapper.entityToDto(user);
         }
         return null;
+    }
+
+    private void updateLogin(Long id, Long newLoginTime) {
+        userRepository.updateLogin(id, newLoginTime);
     }
 }

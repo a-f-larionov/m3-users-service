@@ -21,54 +21,54 @@ public class TopicUsersListener {
 
     @KafkaHandler
     @SendTo("topic-client")
-    public AuthSuccessRsDto auth(@Valid @Payload AuthRqDto authRqDto) {
+    public AuthSuccessRsDto auth(@Valid AuthRqDto authRqDto) {
         return service.auth(authRqDto);
     }
 
     @KafkaHandler
     @SendTo("topic-client")
-    public UpdateUserListInfoRsDto sendUserListInfo(SendUserListInfoRqDto rq) {
+    public UpdateUserListInfoRsDto sendUserListInfo(@Valid SendUserListInfoRqDto rq) {
         return service.getUsers(rq.getUserId(), rq.getIds());
     }
 
     @KafkaHandler
     @SendTo("topic-client")
-    public GotMapFriendIdsRsDto sendMapFriends(SendMapFriendsRqDto rq) {
+    public GotMapFriendIdsRsDto sendMapFriends(@Valid SendMapFriendsRqDto rq) {
         return service.getMapFriends(rq.getUserId(), rq.getMapId(), rq.getFids());
     }
 
     @KafkaHandler
-    public void updateLastLogout(UpdateLastLogoutRqDto dto) {
+    public void updateLastLogout(@Valid UpdateLastLogoutRqDto dto) {
         service.updateLastLogout(dto.getUserId());
     }
 
     @KafkaHandler
     @SendTo("topic-client")
-    public GotFriendsIdsRsDto sendFriendIdsBySocNet(@Payload SendFriendIdsBySocNetRqDto rq) {
+    public GotFriendsIdsRsDto sendFriendIdsBySocNet(@Valid SendFriendIdsBySocNetRqDto rq) {
         return service.getUserIdsFromSocNetIds(rq.getUserId(), rq.getFriendSocNetIds());
     }
 
     @KafkaHandler
     @SendTo("topic-client")
-    public GotTopUsersRsDto sendTopUsers(SendTopUsersRqDto rq) {
+    public GotTopUsersRsDto sendTopUsers(@Valid SendTopUsersRqDto rq) {
         return service.getTopUsersRsDto(rq.getUserId(), rq.getFids());
     }
 
     @KafkaHandler
     @SendTo("topic-client")
-    public SetOneHealthHideRsDto healthUp(HealthBackRqDto rq) {
+    public SetOneHealthHideRsDto healthUp(@Valid HealthBackRqDto rq) {
         return service.healthUp(rq.getUserId());
     }
 
     @KafkaHandler
     @SendTo("topic-client")
-    public SetOneHealthHideRsDto healthDown(HealthDownRqDto rq) {
+    public SetOneHealthHideRsDto healthDown(@Valid HealthDownRqDto rq) {
         return service.healthDown(rq.getUserId(), rq.getPointId());
     }
 
     @KafkaHandler
     @SendTo("topic-client")
-    public UpdateUserInfoRsDto zeroLife(ZeroLifeRqDto rq) {
+    public UpdateUserInfoRsDto zeroLife(@Valid ZeroLifeRqDto rq) {
         return service.zeroLife(rq.getUserId());
     }
 }

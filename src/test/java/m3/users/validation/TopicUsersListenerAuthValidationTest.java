@@ -1,9 +1,10 @@
-package m3.users.listeners;
+package m3.users.validation;
 
 import m3.lib.enums.SocNetType;
 import m3.users.BaseSpringBootTest;
 import m3.users.dto.rq.AuthRqDto;
 import m3.users.dto.rs.AuthSuccessRsDto;
+import m3.users.listeners.TopicUsersListener;
 import m3.users.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,12 +17,12 @@ import org.springframework.boot.autoconfigure.validation.ValidationAutoConfigura
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.CommonErrorHandler;
 import org.springframework.messaging.handler.annotation.support.MethodArgumentNotValidException;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.stream.Stream;
@@ -37,18 +38,16 @@ import static org.mockito.Mockito.*;
 @ComponentScan({"m3.lib.kafka"})
 @EnableKafka
 @ActiveProfiles("test")
-public class TopicUsersListenerValidationTest extends BaseSpringBootTest {
-
-    @Autowired
-    ApplicationContext applicationContext;
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+public class TopicUsersListenerAuthValidationTest extends BaseSpringBootTest {
     @Value("${spring.kafka.topicName}")
     private String topicName;
-    @MockBean
-    UserService userService;
-    @SpyBean
-    CommonErrorHandler commonErrorHandler;
     @Autowired
     KafkaTemplate<String, Object> kafkaTemplate;
+    @SpyBean
+    CommonErrorHandler commonErrorHandler;
+    @MockBean
+    UserService userService;
 
     @Test
     void positive() {
@@ -56,14 +55,12 @@ public class TopicUsersListenerValidationTest extends BaseSpringBootTest {
         doReturn(new AuthSuccessRsDto())
                 .when(userService)
                 .auth(any());
-
         // when
         kafkaTemplate.send(topicName,
                 buildAuthRqDto(VK, 1L, 2L, "auhKey", 3L)
         );
-
         // then
-        verify(userService, timeout(6000))
+        verify(userService, timeout(3000))
                 .auth(any());
     }
 
@@ -73,16 +70,13 @@ public class TopicUsersListenerValidationTest extends BaseSpringBootTest {
         // given - when
         var argumentCaptor = ArgumentCaptor.forClass(Exception.class);
         kafkaTemplate.send("topic-users", rqDto);
-        doReturn(true)
-                .when(commonErrorHandler)
-                .handleOne(any(), any(), any(), any());
 
         // then
-        verify(commonErrorHandler, timeout(5000))
+        verify(commonErrorHandler, timeout(3000))
                 .handleRemaining(argumentCaptor.capture(), any(), any(), any());
 
         Exception e = argumentCaptor.getValue();
-        assertArgumentNotValidException(e.getCause(), expectedErrMsg1, expectedErrMsg2);
+        assertArgumentNotValidExceptionMessages(e.getCause(), expectedErrMsg1, expectedErrMsg2);
     }
 
     private static Stream<Arguments> testSource() {
@@ -113,7 +107,7 @@ public class TopicUsersListenerValidationTest extends BaseSpringBootTest {
                 .build();
     }
 
-    private static void assertArgumentNotValidException(Throwable e, String errMsg1, String errMsg2) {
+    private static void assertArgumentNotValidExceptionMessages(Throwable e, String errMsg1, String errMsg2) {
         assertThat(e)
                 .isInstanceOf(MethodArgumentNotValidException.class)
                 .hasMessageContainingAll(
