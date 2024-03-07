@@ -5,10 +5,12 @@ import m3.users.dto.rq.AuthRqDto;
 import m3.users.services.SocNetService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 @Slf4j
 @Service("socNetVK")
+@Transactional
 public class SocNetVKServiceImpl implements SocNetService {
 
     private final String secretKey;

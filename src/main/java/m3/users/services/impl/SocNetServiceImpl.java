@@ -6,9 +6,11 @@ import m3.users.dto.rq.AuthRqDto;
 import m3.users.services.SocNetService;
 import m3.users.services.SocNetSwitcher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service("socNet")
+@Transactional
 public class SocNetServiceImpl implements SocNetSwitcher, SocNetService {
 
     private final SocNetService socNetVK;
