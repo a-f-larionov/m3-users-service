@@ -40,7 +40,7 @@ import static org.mockito.Mockito.*;
 @EnableKafka
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
-public class TopicUsersListenerValidationSendUserListInfoTest extends BaseSpringBootTest {
+public class TopicUsersListenerSendUserListInfoValidationTest extends BaseSpringBootTest {
 
     @Value("${spring.kafka.topicName}")
     private String topicName;
