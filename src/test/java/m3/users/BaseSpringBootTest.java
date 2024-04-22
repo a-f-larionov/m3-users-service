@@ -5,22 +5,22 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.KafkaContainer;
-import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 @SpringBootTest
 @ActiveProfiles("test")
 public class BaseSpringBootTest {
 
-    public static final MySQLContainer<?> mySQLContainer;
+    public static final PostgreSQLContainer<?> postgreSQLContainer;
 
     static {
-        mySQLContainer = new MySQLContainer<>(DockerImageName.parse("mysql:5.7"))
+        postgreSQLContainer = new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"))
                 .withDatabaseName("test")
                 .withUsername("test")
                 .withPassword("test")
                 .withReuse(true);
-        mySQLContainer.start();
+        postgreSQLContainer.start();
     }
 
     public static final KafkaContainer kafkaContainer;
@@ -33,7 +33,7 @@ public class BaseSpringBootTest {
 
     @DynamicPropertySource
     private static void DynamicPropertySource(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
         registry.add("spring.kafka.bootstrap-servers", kafkaContainer::getBootstrapServers);
     }
 }

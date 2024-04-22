@@ -8,6 +8,10 @@ spring:
     url: ${DATASOURCE_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
+    hikari:
+      connection_timeout: 500000
+      connectionTimeout: 500000
+      networkTimeout: 12314556
 
   kafka:
     auto-offset-reset: earliest

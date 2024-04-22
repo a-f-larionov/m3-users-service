@@ -2,7 +2,7 @@ filename: app-test
 spring:
 
   datasource:
-    url: jdbc:mysql://localhost:13306/test
+    url: jdbc:postgresql://localhost:5432/local
     username: test
     password: test
 

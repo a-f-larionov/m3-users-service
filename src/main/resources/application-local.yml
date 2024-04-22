@@ -1,7 +1,7 @@
 filename: app
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/local
+    url: jdbc:postgresql://localhost:5432/local
     username: local
     password: local
 

@@ -374,6 +374,6 @@ public class UserServiceFuncTest extends BaseSpringBootTest {
     }
 
     private void deleteAllUsers() {
-        jdbcTemplate.update("DELETE FROM users WHERE create_tm IS NOT NULL OR create_tm IS NULL");
+        jdbcTemplate.update("delete from users where create_tm is not null or create_tm is null");
     }
 }

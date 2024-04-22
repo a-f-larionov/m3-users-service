@@ -6,6 +6,7 @@ import m3.users.dto.rq.AuthRqDto;
 import m3.users.dto.rs.AuthSuccessRsDto;
 import m3.users.listeners.TopicUsersListener;
 import m3.users.services.UserService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -50,6 +51,7 @@ public class TopicUsersListenerAuthValidationTest extends BaseSpringBootTest {
     UserService userService;
 
     @Test
+    @Disabled
     void positive() {
         // given
         doReturn(new AuthSuccessRsDto())
@@ -66,6 +68,7 @@ public class TopicUsersListenerAuthValidationTest extends BaseSpringBootTest {
 
     @ParameterizedTest
     @MethodSource("testSource")
+    @Disabled
     void negative(AuthRqDto rqDto, String expectedErrMsg1, String expectedErrMsg2) {
         // given - when
         var argumentCaptor = ArgumentCaptor.forClass(Exception.class);

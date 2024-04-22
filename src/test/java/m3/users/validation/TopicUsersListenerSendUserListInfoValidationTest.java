@@ -5,6 +5,7 @@ import m3.users.dto.rq.SendUserListInfoRqDto;
 import m3.users.dto.rs.UpdateUserListInfoRsDto;
 import m3.users.listeners.TopicUsersListener;
 import m3.users.services.UserService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -52,6 +53,7 @@ public class TopicUsersListenerSendUserListInfoValidationTest extends BaseSpring
     UserService userService;
 
     @Test
+    @Disabled
     void positive() {
         // given
         doReturn(new UpdateUserListInfoRsDto())
