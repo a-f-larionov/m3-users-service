@@ -13,25 +13,23 @@ import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 @Component
-@KafkaListener(topics = "topic-users")
+@KafkaListener(topics = "#{topicNames.currentTopic}")
+@SendTo("#{topicNames.CLIENT}")
 public class TopicUsersListener {
 
     private final UserService service;
 
     @KafkaHandler
-    @SendTo("topic-client")
     public AuthSuccessRsDto auth(@Valid AuthRqDto authRqDto) {
         return service.auth(authRqDto);
     }
 
     @KafkaHandler
-    @SendTo("topic-client")
     public UpdateUserListInfoRsDto sendUserListInfo(@Valid SendUserListInfoRqDto rq) {
         return service.getUsers(rq.getUserId(), rq.getIds());
     }
 
     @KafkaHandler
-    @SendTo("topic-client")
     public GotMapFriendIdsRsDto sendMapFriends(@Valid SendMapFriendsRqDto rq) {
         return service.getMapFriends(rq.getUserId(), rq.getMapId(), rq.getFids());
     }
@@ -42,31 +40,26 @@ public class TopicUsersListener {
     }
 
     @KafkaHandler
-    @SendTo("topic-client")
     public GotFriendsIdsRsDto sendFriendIdsBySocNet(@Valid SendFriendIdsBySocNetRqDto rq) {
         return service.getUserIdsFromSocNetIds(rq.getUserId(), rq.getFriendSocNetIds());
     }
 
     @KafkaHandler
-    @SendTo("topic-client")
     public GotTopUsersRsDto sendTopUsers(@Valid SendTopUsersRqDto rq) {
         return service.getTopUsersRsDto(rq.getUserId(), rq.getFids());
     }
 
     @KafkaHandler
-    @SendTo("topic-client")
     public SetOneHealthHideRsDto healthUp(@Valid HealthBackRqDto rq) {
         return service.healthUp(rq.getUserId());
     }
 
     @KafkaHandler
-    @SendTo("topic-client")
     public SetOneHealthHideRsDto healthDown(@Valid HealthDownRqDto rq) {
         return service.healthDown(rq.getUserId(), rq.getPointId());
     }
 
     @KafkaHandler
-    @SendTo("topic-client")
     public UpdateUserInfoRsDto zeroLife(@Valid ZeroLifeRqDto rq) {
         return service.zeroLife(rq.getUserId());
     }

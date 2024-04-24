@@ -1,5 +1,6 @@
 package m3.users.validation;
 
+import m3.lib.kafka.TopicNames;
 import m3.users.BaseSpringBootTest;
 import m3.users.dto.rq.SendUserListInfoRqDto;
 import m3.users.dto.rs.UpdateUserListInfoRsDto;
@@ -42,9 +43,6 @@ import static org.mockito.Mockito.*;
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class TopicUsersListenerSendUserListInfoValidationTest extends BaseSpringBootTest {
-
-    @Value("${spring.kafka.topicName}")
-    private String topicName;
     @Autowired
     KafkaTemplate<String, Object> kafkaTemplate;
     @SpyBean
@@ -60,7 +58,7 @@ public class TopicUsersListenerSendUserListInfoValidationTest extends BaseSpring
                 .when(userService)
                 .getUsers(any(),anyList());
         // when
-        kafkaTemplate.send(topicName,
+        kafkaTemplate.send(TopicNames.currentTopic,
                 buildRqDto((long) (Math.random() * 10000), List.of(1L, 2L, 3L)));
         // then
         verify(userService, timeout(3000))
@@ -72,7 +70,7 @@ public class TopicUsersListenerSendUserListInfoValidationTest extends BaseSpring
     public void negative(SendUserListInfoRqDto rqDto, String expectedErrMsg1, String expectedErrMsg2) {
         // given - when
         var argumentCaptor = ArgumentCaptor.forClass(Exception.class);
-        kafkaTemplate.send("topic-users", rqDto);
+        kafkaTemplate.send(TopicNames.currentTopic, rqDto);
 
          // then
         verify(commonErrorHandler, timeout(3000))

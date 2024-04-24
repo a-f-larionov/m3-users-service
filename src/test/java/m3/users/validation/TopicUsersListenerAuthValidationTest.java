@@ -1,6 +1,7 @@
 package m3.users.validation;
 
 import m3.lib.enums.SocNetType;
+import m3.lib.kafka.TopicNames;
 import m3.users.BaseSpringBootTest;
 import m3.users.dto.rq.AuthRqDto;
 import m3.users.dto.rs.AuthSuccessRsDto;
@@ -41,8 +42,6 @@ import static org.mockito.Mockito.*;
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class TopicUsersListenerAuthValidationTest extends BaseSpringBootTest {
-    @Value("${spring.kafka.topicName}")
-    private String topicName;
     @Autowired
     KafkaTemplate<String, Object> kafkaTemplate;
     @SpyBean
@@ -58,7 +57,7 @@ public class TopicUsersListenerAuthValidationTest extends BaseSpringBootTest {
                 .when(userService)
                 .auth(any());
         // when
-        kafkaTemplate.send(topicName,
+        kafkaTemplate.send(TopicNames.currentTopic,
                 buildAuthRqDto(VK, 1L, 2L, "auhKey", 3L)
         );
         // then
@@ -72,7 +71,7 @@ public class TopicUsersListenerAuthValidationTest extends BaseSpringBootTest {
     void negative(AuthRqDto rqDto, String expectedErrMsg1, String expectedErrMsg2) {
         // given - when
         var argumentCaptor = ArgumentCaptor.forClass(Exception.class);
-        kafkaTemplate.send("topic-users", rqDto);
+        kafkaTemplate.send(TopicNames.currentTopic, rqDto);
 
         // then
         verify(commonErrorHandler, timeout(3000))
