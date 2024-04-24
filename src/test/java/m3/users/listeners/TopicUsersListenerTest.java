@@ -8,19 +8,26 @@ import m3.users.dto.rs.GotMapFriendIdsRsDto;
 import m3.users.dto.rs.UpdateUserListInfoRsDto;
 import m3.users.services.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class TopicUsersListenerTest {
+    @Mock
+    private UserServiceImpl service;
+    @InjectMocks
+    private TopicUsersListener listener;
 
-    private final UserServiceImpl service = mock(UserServiceImpl.class);
-
-    private final TopicUsersListener listener = new TopicUsersListener(service);
-
-    //@todo  check it! Most of these are self-explanatory, but the one we should highlight is the consumer property auto-offset-reset: earliest.
+    //@todo  check it!
+    // Most of these are self-explanatory,
+    // but the one we should highlight is the consumer property auto-offset-reset: earliest.
     @Test
     void auth() {
         // given
