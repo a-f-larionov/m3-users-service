@@ -43,7 +43,7 @@ import static org.mockito.Mockito.*;
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class TopicUsersListenerSendUserListInfoValidationTest extends BaseSpringBootTest {
-    @Autowired
+    @Autowiredstat
     KafkaTemplate<String, Object> kafkaTemplate;
     @SpyBean
     CommonErrorHandler commonErrorHandler;
